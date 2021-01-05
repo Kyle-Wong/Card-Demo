@@ -41,7 +41,7 @@ public class Deck
     Stack<Card> newDeck = new Stack<Card>();
     for (int i = 0; i < numDecks; i++)
     {
-      for (int value = 0; value < 13; value++)
+      for (int value = 1; value <= 13; value++)
       {
         for (int suit = 0; suit < 4; suit++)
         {
@@ -57,7 +57,7 @@ public class Deck
     List<Card> shuffleList = new List<Card>(deck);
     for (int i = 0; i < shuffleList.Count; i++)
     {
-      int randIndex = rng.Next();
+      int randIndex = rng.Next() % shuffleList.Count;
       Card temp = shuffleList[i];
       shuffleList[i] = shuffleList[randIndex];
       shuffleList[randIndex] = temp;

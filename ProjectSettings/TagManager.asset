@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - CardRotationReference
+  - Hand
+  - Deck
+  - CardList
   layers:
   - Default
   - TransparentFX

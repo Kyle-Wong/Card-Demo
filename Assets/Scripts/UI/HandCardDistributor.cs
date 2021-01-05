@@ -28,14 +28,6 @@ public class HandCardDistributor : MonoBehaviour
   // Update is called once per frame
   void Update()
   {
-    if (Input.GetKeyDown(KeyCode.Space))
-    {
-      AddCard();
-    }
-    if (Input.GetKeyDown(KeyCode.N))
-    {
-      RemoveCard(0);
-    }
     DistributeCards();
   }
   private List<Transform> GetChildren()
@@ -52,7 +44,7 @@ public class HandCardDistributor : MonoBehaviour
     for (int i = 0; i < cardMarkers.Count; i++)
     {
       Vector3 cardPosition = cardMarkers[i].position;
-      cardMarkers[i].position = new Vector3(parentX + spacing * i - width / 2, cardPosition.y, cardPosition.z);
+      cardMarkers[i].position = new Vector3(parentX + (spacing * i - width / 2) * Screen.width, cardPosition.y, cardPosition.z);
     }
   }
 
@@ -64,13 +56,14 @@ public class HandCardDistributor : MonoBehaviour
     }
     return cardMarkers[index];
   }
-  private void AddCard()
+  public Transform AddCardSpace()
   {
     Transform newCardMarker = Object.Instantiate(cardMarkerPrefab, transform);
     cardMarkers.Add(newCardMarker);
     DistributeCards();
+    return newCardMarker;
   }
-  private void RemoveCard(int index)
+  public void RemoveCardSpace(int index)
   {
     if (cardMarkers.Count <= 0)
     {

@@ -5,10 +5,11 @@ public class Card
 {
 
   // Use this for initialization
-  public static readonly string[] suitTypes = { "Hearts", "Diamonds", "Clubs", "Spades" };
+  public static readonly string[] suitTypes = { "Clubs", "Diamonds", "Hearts", "Spades" };
   public static readonly string[] valueNames = { "Ace", "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King" };
-  private int suit;
-  private int value;
+
+  public int suit;
+  public int value;
 
   public Card(int suit, int value)
   {
@@ -21,7 +22,11 @@ public class Card
   }
   public string ValueName()
   {
-    return valueNames[value];
+    return valueNames[value - 1];
+  }
+  public override string ToString()
+  {
+    return ValueName() + " of " + SuitType();
   }
   public bool Equals(Card other)
   {

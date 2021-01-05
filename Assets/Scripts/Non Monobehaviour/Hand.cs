@@ -46,4 +46,13 @@ public class Hand
     }
     return null;
   }
+  public override string ToString()
+  {
+    string s = "";
+    for (int i = 0; i < hand.Count; i++)
+    {
+      s += hand[i] + ", ";
+    }
+    return s;
+  }
 }
