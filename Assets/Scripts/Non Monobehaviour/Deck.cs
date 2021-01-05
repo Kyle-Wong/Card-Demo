@@ -9,19 +9,31 @@ public class Deck
   // Use this for initialization
   private Stack<Card> cardStack;
   private Random rng;
-  public Deck(int numDecks)
+
+  public Deck(int numDecks = 1, int? seed = null)
   {
-    this.cardStack = this.GenerateDeck(numDecks);
-  }
-  public Deck(int numDecks, int seed)
-  {
-    rng = new Random(seed);
+    if (seed != null)
+    {
+      rng = new Random((int)seed);
+    }
+    else
+    {
+      rng = new Random();
+    }
     this.cardStack = this.GenerateDeck(numDecks);
   }
   // Update is called once per frame
   public Card DrawCard()
   {
+    if (Empty())
+    {
+      return null;
+    }
     return cardStack.Pop();
+  }
+  public bool Empty()
+  {
+    return cardStack.Count == 0;
   }
 
   private Stack<Card> GenerateDeck(int numDecks)

@@ -23,4 +23,8 @@ public class Card
   {
     return valueNames[value];
   }
+  public bool Equals(Card other)
+  {
+    return this.suit == other.suit && this.value == other.value;
+  }
 }
