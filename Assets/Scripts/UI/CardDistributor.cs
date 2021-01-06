@@ -1,25 +1,25 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HandCardDistributor : MonoBehaviour
+public class CardDistributor : MonoBehaviour
 {
-  /*
-		Handles the left/right position of cards in the player's hand
-		and makes space for new ones as needed.
-	*/
+
   // Use this for initialization
-  public float spacing;
+  public Vector2 spacing;
+  public bool centerX;
+  public bool centerY;
+
   public Transform cardMarkerPrefab;
   private List<Transform> cardMarkers;
-  public int handSize
+  public int numCards
   {
     get
     {
       return cardMarkers.Count;
     }
   }
-  void Start()
+  void Awake()
   {
     cardMarkers = GetChildren();
 
@@ -39,12 +39,19 @@ public class HandCardDistributor : MonoBehaviour
   }
   private void DistributeCards()
   {
-    float width = (cardMarkers.Count - 1) * spacing;
-    float parentX = transform.position.x;
+    float width = (cardMarkers.Count - 1) * spacing.x;
+    float height = (cardMarkers.Count - 1) * spacing.y;
+    if (!centerX)
+    {
+      width = 0;
+    }
+    if (!centerY)
+    {
+      height = 0;
+    }
     for (int i = 0; i < cardMarkers.Count; i++)
     {
-      Vector3 cardPosition = cardMarkers[i].position;
-      cardMarkers[i].position = new Vector3(parentX + (spacing * i - width / 2), cardPosition.y, cardPosition.z);
+      cardMarkers[i].position = new Vector3(transform.position.x + (spacing.x * i - width / 2), transform.position.y + (spacing.y * i - height / 2), cardMarkers[i].position.z);
     }
   }
 
@@ -55,6 +62,18 @@ public class HandCardDistributor : MonoBehaviour
       Debug.LogWarning("Invalid card get: card at index " + index);
     }
     return cardMarkers[index];
+  }
+
+  public int IndexOf(Transform cardMarker)
+  {
+    for (int i = 0; i < cardMarkers.Count; i++)
+    {
+      if (cardMarkers[i].Equals(cardMarker))
+      {
+        return i;
+      }
+    }
+    return -1;
   }
   public Transform AddCardSpace()
   {

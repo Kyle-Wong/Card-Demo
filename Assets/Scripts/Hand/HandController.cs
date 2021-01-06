@@ -2,30 +2,40 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HandController : MonoBehaviour
+public class HandController : CardsController
 {
 
   // Use this for initialization
-  Hand hand;
-  HandCardDistributor handCardDistributor;
+  CardDistributor cardDistributor;
+  protected override void Awake()
+  {
+    base.Awake();
+  }
   void Start()
   {
-    hand = new Hand();
-    handCardDistributor = GetComponent<HandCardDistributor>();
+    cardDistributor = GetComponent<CardDistributor>();
   }
 
   // Update is called once per frame
 
-  public void AddCard(Transform card)
+  public override void AddCard(Transform card)
   {
-    Transform cardMarker = handCardDistributor.AddCardSpace();
+    Transform cardMarker = cardDistributor.AddCardSpace();
     card.GetComponent<MoveToTarget>().target = cardMarker;
-    hand.AddCard(card.GetComponent<GUICard>().CardData);
+    cardGroup.AddCard(card.GetComponent<GUICard>().CardData);
   }
-  public void RemoveCard(Transform card)
+  public override void RemoveCard(Transform card)
   {
     Card cardData = card.GetComponent<GUICard>().CardData;
-    int cardIndex = hand.RemoveCard(cardData);
-    handCardDistributor.RemoveCardSpace(cardIndex);
+    int cardIndex = cardGroup.RemoveCard(cardData);
+    cardDistributor.RemoveCardSpace(cardIndex);
+  }
+  public override bool CanAddCard(Transform cardMarker, Transform card)
+  {
+    return false; //add cards through drawing from deck
+  }
+  public override bool CanRemoveCard(Transform cardMarker, Transform card)
+  {
+    return true; //true for testing purposes
   }
 }

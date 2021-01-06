@@ -8,17 +8,17 @@ public class GameController : MonoBehaviour
 {
 
   // Use this for initialization
-  DeckController deck;
+  public DeckController deck;
+  public HandController hand;
+
+  public StackController[] stacks;
   public int maxHandSize;
-  HandController hand;
 
   //Card fronts are in order from Aces to Kings, with suits in alphabetical order (Clubs->Diamonds->Hearts->Spades)
   public Sprite[] cardFronts;
   public Sprite cardBack;
   void Awake()
   {
-    hand = GameObject.FindGameObjectWithTag("Hand").GetComponent<HandController>();
-    deck = GameObject.FindGameObjectWithTag("Deck").GetComponent<DeckController>();
   }
 
   // Update is called once per frame
@@ -36,5 +36,10 @@ public class GameController : MonoBehaviour
       Transform newCard = deck.DrawCard();
       hand.AddCard(newCard);
     }
+  }
+  public static void TransferCard(Transform card, Transform source, Transform destination)
+  {
+    source.GetComponentInParent<CardsController>().RemoveCard(card);
+    destination.GetComponentInParent<CardsController>().AddCard(card);
   }
 }

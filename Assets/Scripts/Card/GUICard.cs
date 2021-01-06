@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
+using UnityEngine.EventSystems;
 public class GUICard : MonoBehaviour
 {
 
@@ -52,20 +52,36 @@ public class GUICard : MonoBehaviour
   }
   private int ImageCode()
   {
-    print(cardData + ", " + ((cardData.value) * 4 + cardData.suit));
-
-
     return (cardData.value - 1) * 4 + cardData.suit;
   }
   public void OnDrag()
   {
+    if (!moveToTarget.target.GetComponentInParent<CardsController>().CanRemoveCard(moveToTarget.target, transform))
+    {
+      return;
+    }
     isHeld = true;
     prevPosition = moveToTarget.target;
-    moveToTarget.target = FollowMouse.instance.transform;
+    moveToTarget.target = Cursor.instance.transform;
+    transform.SetAsLastSibling();
   }
-  public void OnRelease()
+  public void OnRelease(BaseEventData data)
   {
+    if (!isHeld)
+    {
+      return;
+    }
     isHeld = false;
+    Transform cardMarker = Cursor.instance.GetCardMarker((PointerEventData)data);
+    if (cardMarker != null)
+    {
+      CardsController cc = cardMarker.GetComponentInParent<CardsController>();
+      if (cc.CanAddCard(cardMarker, transform))
+      {
+        GameController.TransferCard(transform, prevPosition, cardMarker);
+        return;
+      }
+    }
     moveToTarget.target = prevPosition;
   }
 }
