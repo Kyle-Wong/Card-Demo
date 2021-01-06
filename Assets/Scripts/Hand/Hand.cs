@@ -23,8 +23,9 @@ public class Hand
   {
     hand.Add(card);
   }
-  public Card RemoveCard(int index)
+  public Card RemoveCardAt(int index)
   {
+    //Remove card at index and return it
     if (index < 0 || index >= hand.Count)
     {
       return null;
@@ -33,18 +34,18 @@ public class Hand
     hand.RemoveAt(index);
     return card;
   }
-  public Card RemoveCard(Card card)
+  public int RemoveCard(Card card)
   {
+    //Remove card from hand and return its index
     for (int i = 0; i < hand.Count; i++)
     {
       if (hand[i].Equals(card))
       {
-        Card temp = hand[i];
         hand.RemoveAt(i);
-        return temp;
+        return i;
       }
     }
-    return null;
+    return -1;
   }
   public override string ToString()
   {

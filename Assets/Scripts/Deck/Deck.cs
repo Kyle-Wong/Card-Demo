@@ -49,10 +49,9 @@ public class Deck
         }
       }
     }
-
-    return this.Shuffle(newDeck);
+    return this.ShuffleCards(newDeck);
   }
-  public Stack<Card> Shuffle(Stack<Card> deck)
+  public Stack<Card> ShuffleCards(Stack<Card> deck)
   {
     List<Card> shuffleList = new List<Card>(deck);
     for (int i = 0; i < shuffleList.Count; i++)
@@ -64,6 +63,9 @@ public class Deck
     }
     return new Stack<Card>(shuffleList);
   }
-
+  public Stack<Card> Shuffle()
+  {
+    return ShuffleCards(cardStack);
+  }
 
 }
