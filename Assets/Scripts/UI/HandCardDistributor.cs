@@ -44,7 +44,7 @@ public class HandCardDistributor : MonoBehaviour
     for (int i = 0; i < cardMarkers.Count; i++)
     {
       Vector3 cardPosition = cardMarkers[i].position;
-      cardMarkers[i].position = new Vector3(parentX + (spacing * i - width / 2) * Screen.width, cardPosition.y, cardPosition.z);
+      cardMarkers[i].position = new Vector3(parentX + (spacing * i - width / 2), cardPosition.y, cardPosition.z);
     }
   }
 
