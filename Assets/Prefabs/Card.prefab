@@ -166,7 +166,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tiltScale: {x: 120, y: 120}
-  tiltSpeed: 40
+  tiltSpeed: 60
 --- !u!114 &114674914076257628
 MonoBehaviour:
   m_ObjectHideFlags: 1

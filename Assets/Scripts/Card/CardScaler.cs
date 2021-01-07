@@ -13,7 +13,6 @@ public class CardScaler : MonoBehaviour
   public float scaleSpeed;
   private Vector3 scaleVector;
   private Vector3 startingScale;
-  // Use this for initialization
   void Start()
   {
     card = GetComponent<GUICard>();

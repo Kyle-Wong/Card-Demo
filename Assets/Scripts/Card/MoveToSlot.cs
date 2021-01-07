@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MoveToMarker : MonoBehaviour
+public class MoveToSlot : MonoBehaviour
 {
 
   // Use this for initialization
@@ -19,16 +19,16 @@ public class MoveToMarker : MonoBehaviour
   // Update is called once per frame
   void Update()
   {
-    Transform cardMarker = card.currCardMarker;
+    Transform cardSlot = card.currCardSlot;
     if (card.isHeld)
     {
       transform.position = Vector3.Lerp(transform.position, cursor.position, moveSpeed * Time.deltaTime);
       //transform.rotation = Quaternion.Lerp(transform.rotation, cursor.rotation, rotationSpeed * Time.deltaTime);
     }
-    else if (cardMarker != null)
+    else if (cardSlot != null)
     {
-      transform.position = Vector3.Lerp(transform.position, cardMarker.position, moveSpeed * Time.deltaTime);
-      transform.rotation = Quaternion.Lerp(transform.rotation, cardMarker.rotation, rotationSpeed * Time.deltaTime);
+      transform.position = Vector3.Lerp(transform.position, cardSlot.position, moveSpeed * Time.deltaTime);
+      transform.rotation = Quaternion.Lerp(transform.rotation, cardSlot.rotation, rotationSpeed * Time.deltaTime);
     }
 
   }

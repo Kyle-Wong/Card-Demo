@@ -3,7 +3,11 @@ using System.Collections.Generic;
 
 public class CardList
 {
-
+  /*
+    Mostly an extension of List.
+    Contains helper functions that are commonly used
+    on groups of cards.
+  */
   private List<Card> cardList;
 
   public CardList()
@@ -50,8 +54,11 @@ public class CardList
     }
     return -1;
   }
-  public void RearrangeCard(int fromIndex, int toIndex)
+  public void RearrangeCards(int fromIndex, int toIndex)
   {
+    /*
+      Move a card from fromIndex to toIndex, shifting all other cards left or right
+    */
     if (fromIndex == toIndex)
     {
       return;

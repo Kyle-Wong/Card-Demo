@@ -4,8 +4,11 @@ using UnityEngine;
 
 public class CardTilt : MonoBehaviour
 {
-
-  // Use this for initialization
+  /*
+    Tilt held cards in the direction of travel.
+    tiltScale determines how much tilt can occur.
+    tiltSpeed determines how quickly the card will tilt.
+  */
   public Vector2 tiltScale;
   public float tiltSpeed;
   private GUICard card;
@@ -22,13 +25,14 @@ public class CardTilt : MonoBehaviour
     if (card.isHeld)
     {
       Vector2 velocity = transform.position - prevPosition;
-      print(transform.eulerAngles);
       transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(new Vector3(-velocity.y * tiltScale.y, velocity.x * tiltScale.x, 0)), tiltSpeed * Time.deltaTime);
     }
     else
     {
+      //Return to non-rotated rotation
       transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.identity, tiltSpeed * Time.deltaTime);
     }
+    //for tracking card's velocity
     prevPosition = transform.position;
   }
 }

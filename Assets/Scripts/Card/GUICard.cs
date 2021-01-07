@@ -8,7 +8,7 @@ public class GUICard : MonoBehaviour
 
   // Use this for initialization
   GameController gameController;
-  public Transform currCardMarker;
+  public Transform currCardSlot;
   private Card cardData;
   [HideInInspector]
   public bool isHeld;
@@ -62,11 +62,11 @@ public class GUICard : MonoBehaviour
   public void OnDrag()
   {
     /*
-      If card can be picked up, then set its cardMarker to the cursor's position.
-      Save the current cardMarker to return the card to its last valid location if needed.
+      If card can be picked up, then set its CardSlot to the cursor's position.
+      Save the current CardSlot to return the card to its last valid location if needed.
       Set as last sibling to ensure card draws above all others.
     */
-    if (currCardMarker == null || !currCardMarker.GetComponentInParent<CardsController>().CanRemoveCard(currCardMarker, transform))
+    if (currCardSlot == null || !currCardSlot.GetComponentInParent<CardsController>().CanRemoveCard(currCardSlot, transform))
     {
       return;
     }
@@ -79,28 +79,38 @@ public class GUICard : MonoBehaviour
   }
   public void OnRelease(BaseEventData data)
   {
+    /*
+      Drop the held card. If there is a valid card slot, the card will be transferred to it.
+      Otherwise, it returns to where it came from.
+    */
     if (!isHeld)
     {
       return;
     }
     isHeld = false;
     image.raycastTarget = true;
-    Cursor.instance.DropCard((PointerEventData)data, currCardMarker, transform);
+    Cursor.instance.DropCard((PointerEventData)data, currCardSlot, transform);
   }
   public void OnPointerEnter()
   {
-    if (currCardMarker == null)
+    /*
+      Behavior determined by type of CardController that owns this slot
+    */
+    if (currCardSlot == null)
     {
       return;
     }
-    currCardMarker.GetComponent<CardMarker>().cardMarkerOwner.OnPointerEnter(transform, Cursor.instance.cardHeld);
+    currCardSlot.GetComponent<CardSlot>().CardSlotOwner.OnPointerEnter(transform, Cursor.instance.cardHeld);
   }
   public void OnPointerExit()
   {
-    if (currCardMarker == null)
+    /*
+      Behavior determined by type of CardController that owns this slot
+    */
+    if (currCardSlot == null)
     {
       return;
     }
-    currCardMarker.GetComponent<CardMarker>().cardMarkerOwner.OnPointerExit(transform, Cursor.instance.cardHeld);
+    currCardSlot.GetComponent<CardSlot>().CardSlotOwner.OnPointerExit(transform, Cursor.instance.cardHeld);
   }
 }

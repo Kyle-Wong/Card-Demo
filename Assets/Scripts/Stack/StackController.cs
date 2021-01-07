@@ -6,7 +6,7 @@ public class StackController : CardsController
 {
 
   // Use this for initialization
-  CardDistributor cardDistributor;
+  SlotDistributor slotDistributor;
 
   protected override void Awake()
   {
@@ -14,8 +14,8 @@ public class StackController : CardsController
   }
   void Start()
   {
-    cardDistributor = GetComponent<CardDistributor>();
-    cardDistributor.AddCardSpace();
+    slotDistributor = GetComponent<SlotDistributor>();
+    slotDistributor.AddCardSpace();
   }
 
   // Update is called once per frame
@@ -26,21 +26,23 @@ public class StackController : CardsController
   public override void AddCard(Transform card)
   {
     cardList.AddCard(card.GetComponent<GUICard>().CardData);
-    card.GetComponent<GUICard>().currCardMarker = cardDistributor.GetCardMarker(cardDistributor.numCards - 1);
-    cardDistributor.AddCardSpace();
+    card.GetComponent<GUICard>().currCardSlot = slotDistributor.GetCardSlot(slotDistributor.numCards - 1);
+    slotDistributor.AddCardSpace();
   }
   public override void RemoveCard(Transform card)
   {
     int cardIndex = cardList.RemoveCard(card.GetComponent<GUICard>().CardData);
-    cardDistributor.RemoveCardSpace(cardIndex);
+    slotDistributor.RemoveCardSpace(cardIndex);
   }
-  public override bool CanAddCard(Transform cardMarker, Transform card)
+  public override bool CanAddCard(Transform cardSlot, Transform card)
   {
-    return cardDistributor.IndexOf(cardMarker) == cardDistributor.numCards - 1;
+    //Last card slot is always empty
+    return slotDistributor.IndexOf(cardSlot) == slotDistributor.numCards - 1;
   }
-  public override bool CanRemoveCard(Transform cardMarker, Transform card)
+  public override bool CanRemoveCard(Transform cardSlot, Transform card)
   {
-    return cardDistributor.IndexOf(cardMarker) == cardDistributor.numCards - 2;
+    //second-to-last card slot is the last card added
+    return slotDistributor.IndexOf(cardSlot) == slotDistributor.numCards - 2;
   }
 
 }

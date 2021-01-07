@@ -3,8 +3,11 @@ using System.Collections.Generic;
 
 public class Card
 {
-
-  // Use this for initialization
+  /*
+    Class that represents a card. 
+    Suit is int [0-3] "Clubs", "Diamonds", "Hearts", "Spades"
+    Value is int [1-13]
+  */
   public static readonly string[] suitTypes = { "Clubs", "Diamonds", "Hearts", "Spades" };
   public static readonly string[] valueNames = { "Ace", "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King" };
 

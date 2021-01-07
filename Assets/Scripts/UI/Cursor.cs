@@ -10,7 +10,7 @@ public class Cursor : MonoBehaviour
   private EventSystem eventSystem;
   public static Cursor instance;
   Camera mainCamera;
-  private const string cardMarkerTag = "CardMarker";
+  private const string cardSlotTag = "CardSlot";
 
 
   [HideInInspector]
@@ -41,21 +41,21 @@ public class Cursor : MonoBehaviour
   {
     cardHeld = card;
   }
-  public void DropCard(PointerEventData data, Transform prevMarker, Transform card)
+  public void DropCard(PointerEventData data, Transform prevSlot, Transform card)
   {
     /*
-      Raycast from mouse cursor in order to check if there is a valid cardMarker to place
-      the card into. If there is such a marker, transfer the card from its last owner to 
+      Raycast from mouse cursor in order to check if there is a valid cardSlot to place
+      the card into. If there is such a slot, transfer the card from its last owner to 
       the new owner.
     */
     cardHeld = null;
-    Transform cardMarker = GetCardMarker((PointerEventData)data);
-    if (cardMarker != null)
+    Transform cardSlot = GetCardSlot((PointerEventData)data);
+    if (cardSlot != null)
     {
-      CardsController cc = cardMarker.GetComponentInParent<CardsController>();
-      if (cc.CanAddCard(cardMarker, card))
+      CardsController cc = cardSlot.GetComponentInParent<CardsController>();
+      if (cc.CanAddCard(cardSlot, card))
       {
-        GameController.TransferCard(card, prevMarker, cardMarker);
+        GameController.TransferCard(card, prevSlot, cardSlot);
         return;
       }
     }
@@ -67,15 +67,15 @@ public class Cursor : MonoBehaviour
     eventSystem.RaycastAll(data, hits);
     return hits;
   }
-  public Transform GetCardMarker(PointerEventData data)
+  public Transform GetCardSlot(PointerEventData data)
   {
     /*
-      Return the first CardMarker under the mouse cursor, or null if none are found
+      Return the first cardSlot under the mouse cursor, or null if none are found
     */
     List<RaycastResult> hits = RaycastAll(data);
     foreach (RaycastResult hit in hits)
     {
-      if (hit.gameObject.CompareTag(cardMarkerTag))
+      if (hit.gameObject.CompareTag(cardSlotTag))
       {
         return hit.gameObject.transform;
       }

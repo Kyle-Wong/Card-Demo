@@ -8,7 +8,7 @@ TagManager:
   - Hand
   - Deck
   - CardList
-  - CardMarker
+  - CardSlot
   layers:
   - Default
   - TransparentFX

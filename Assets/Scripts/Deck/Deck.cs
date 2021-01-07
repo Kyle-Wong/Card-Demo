@@ -5,12 +5,16 @@ using System;
 
 public class Deck
 {
+  /*
+    Class that generates a deck and deals out cards.
+    Can be created with a seed for debugging purposes.
+    Can be made bottomless to automatically generate a new deck once it empties.
+  */
 
-  // Use this for initialization
   private Stack<Card> cardStack;
   private Random rng;
-
-  public Deck(int numDecks = 1, int? seed = null)
+  private bool bottomless;
+  public Deck(int numDecks = 1, bool bottomless = false, int? seed = null)
   {
     if (seed != null)
     {
@@ -21,22 +25,27 @@ public class Deck
       rng = new Random();
     }
     this.cardStack = this.GenerateDeck(numDecks);
+    this.bottomless = bottomless;
   }
-  // Update is called once per frame
   public Card DrawCard()
   {
     if (Empty())
     {
       return null;
     }
-    return cardStack.Pop();
+    Card card = cardStack.Pop();
+    if (Empty() && bottomless)
+    {
+      cardStack = GenerateDeck();
+    }
+    return card;
   }
   public bool Empty()
   {
     return cardStack.Count == 0;
   }
 
-  private Stack<Card> GenerateDeck(int numDecks)
+  private Stack<Card> GenerateDeck(int numDecks = 1)
   {
     Stack<Card> newDeck = new Stack<Card>();
     for (int i = 0; i < numDecks; i++)
