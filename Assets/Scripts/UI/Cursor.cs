@@ -59,7 +59,6 @@ public class Cursor : MonoBehaviour
         return;
       }
     }
-    card.GetComponent<GUICard>().currCardMarker = prevMarker;
 
   }
   private List<RaycastResult> RaycastAll(PointerEventData data)

@@ -54,7 +54,20 @@ public class CardDistributor : MonoBehaviour
       cardMarkers[i].position = new Vector3(transform.position.x + (spacing.x * i - width / 2), transform.position.y + (spacing.y * i - height / 2), cardMarkers[i].position.z);
     }
   }
+  public void RearrangeMarker(int fromIndex, int toIndex)
+  {
+    /*
+      Moves cardMarker at fromIndex and moves it to toIndex
+    */
+    if (fromIndex == toIndex)
+    {
+      return;
+    }
+    Transform cardMarker = cardMarkers[fromIndex];
+    cardMarkers.RemoveAt(fromIndex);
+    cardMarkers.Insert(toIndex, cardMarker);
 
+  }
   public Transform GetCardMarker(int index)
   {
     if (index < 0 || index >= cardMarkers.Count)

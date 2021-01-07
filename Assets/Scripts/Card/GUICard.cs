@@ -12,7 +12,6 @@ public class GUICard : MonoBehaviour
   private Card cardData;
   [HideInInspector]
   public bool isHeld;
-  private Transform prevMarker;
   public Card CardData
   {
     get
@@ -67,13 +66,12 @@ public class GUICard : MonoBehaviour
       Save the current cardMarker to return the card to its last valid location if needed.
       Set as last sibling to ensure card draws above all others.
     */
-    if (!currCardMarker.GetComponentInParent<CardsController>().CanRemoveCard(currCardMarker, transform))
+    if (currCardMarker == null || !currCardMarker.GetComponentInParent<CardsController>().CanRemoveCard(currCardMarker, transform))
     {
       return;
     }
     isHeld = true;
-    prevMarker = currCardMarker;
-    currCardMarker = Cursor.instance.transform;
+    image.raycastTarget = false;
     transform.SetAsLastSibling();
 
     Cursor.instance.PickUpCard(transform);
@@ -86,6 +84,15 @@ public class GUICard : MonoBehaviour
       return;
     }
     isHeld = false;
-    Cursor.instance.DropCard((PointerEventData)data, prevMarker, transform);
+    image.raycastTarget = true;
+    Cursor.instance.DropCard((PointerEventData)data, currCardMarker, transform);
+  }
+  public void OnPointerEnter()
+  {
+    currCardMarker.GetComponent<CardMarker>().cardMarkerOwner.OnPointerEnter(transform, Cursor.instance.cardHeld);
+  }
+  public void OnPointerExit()
+  {
+    currCardMarker.GetComponent<CardMarker>().cardMarkerOwner.OnPointerExit(transform, Cursor.instance.cardHeld);
   }
 }

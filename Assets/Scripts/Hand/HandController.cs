@@ -14,17 +14,45 @@ public class HandController : CardsController
   void Start()
   {
     cardDistributor = GetComponent<CardDistributor>();
-    cardDistributor.AddCardSpace();
   }
 
-  // Update is called once per frame
-
+  public void ShiftCard(Transform handCardMarker, Transform heldCardMarker)
+  {
+    /*
+      If the player is holding a card and hovers over a card in hand,
+      reorder the cards in hand such that the marker for the card held by the cursor
+      is at the cursor's current location. Shift all other cards to the right or left.
+    */
+    if (handCardMarker.Equals(heldCardMarker))
+    {
+      //Do nothing if both card markers are the same
+      return;
+    }
+    int handCardIndex = cardDistributor.IndexOf(handCardMarker);
+    int heldCardIndex = cardDistributor.IndexOf(heldCardMarker);
+    print(heldCardIndex + ", " + handCardIndex);
+    cardDistributor.RearrangeMarker(heldCardIndex, handCardIndex);
+  }
+  public override void OnPointerEnter(Transform handCard, Transform heldCard)
+  {
+    if (heldCard == null)
+    {
+      return;
+    }
+    Transform heldCardMarker = heldCard.GetComponent<GUICard>().currCardMarker;
+    Transform handCardMarker = handCard.GetComponent<GUICard>().currCardMarker;
+    if (heldCardMarker.GetComponentInParent<HandController>() != null)
+    {
+      //Only shift cards if the held card is also from hand.
+      ShiftCard(handCardMarker, heldCardMarker);
+    }
+  }
   public override void AddCard(Transform card)
   {
-    Transform cardMarker = cardDistributor.Last();
+
+    Transform cardMarker = cardDistributor.AddCardSpace();
     card.GetComponent<GUICard>().currCardMarker = cardMarker;
     cardGroup.AddCard(card.GetComponent<GUICard>().CardData);
-    cardDistributor.AddCardSpace();
   }
   public override void RemoveCard(Transform card)
   {
@@ -40,4 +68,5 @@ public class HandController : CardsController
   {
     return true; //true for testing purposes
   }
+
 }
