@@ -14,15 +14,17 @@ public class HandController : CardsController
   void Start()
   {
     cardDistributor = GetComponent<CardDistributor>();
+    cardDistributor.AddCardSpace();
   }
 
   // Update is called once per frame
 
   public override void AddCard(Transform card)
   {
-    Transform cardMarker = cardDistributor.AddCardSpace();
+    Transform cardMarker = cardDistributor.Last();
     card.GetComponent<GUICard>().currCardMarker = cardMarker;
     cardGroup.AddCard(card.GetComponent<GUICard>().CardData);
+    cardDistributor.AddCardSpace();
   }
   public override void RemoveCard(Transform card)
   {

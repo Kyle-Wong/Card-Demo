@@ -20,7 +20,6 @@ public class MoveToTarget : MonoBehaviour
     Transform cardMarker = card.currCardMarker;
     if (cardMarker != null)
     {
-      Vector3 tocardMarker = (cardMarker.position - transform.position).normalized;
       transform.position = Vector3.Lerp(transform.position, cardMarker.position, moveSpeed * Time.deltaTime);
       transform.rotation = Quaternion.Lerp(transform.rotation, cardMarker.rotation, rotationSpeed * Time.deltaTime);
     }

@@ -10,8 +10,9 @@ public class GUICard : MonoBehaviour
   GameController gameController;
   public Transform currCardMarker;
   private Card cardData;
-  private bool isHeld;
-  private Transform prevPosition;
+  [HideInInspector]
+  public bool isHeld;
+  private Transform prevMarker;
   public Card CardData
   {
     get
@@ -39,6 +40,10 @@ public class GUICard : MonoBehaviour
   }
   private void UpdateCard(Card card)
   {
+    /*
+      If card is faceup, get the correct sprite for the card's suit and rank
+      from gameController
+    */
     if (faceUp)
     {
       image.sprite = gameController.cardFronts[ImageCode()];
@@ -50,19 +55,29 @@ public class GUICard : MonoBehaviour
   }
   private int ImageCode()
   {
+    /*
+      Get sprite index matching card's suit and rank stored in gameController
+    */
     return (cardData.value - 1) * 4 + cardData.suit;
   }
   public void OnDrag()
   {
+    /*
+      If card can be picked up, then set its cardMarker to the cursor's position.
+      Save the current cardMarker to return the card to its last valid location if needed.
+      Set as last sibling to ensure card draws above all others.
+    */
     if (!currCardMarker.GetComponentInParent<CardsController>().CanRemoveCard(currCardMarker, transform))
     {
       return;
     }
     isHeld = true;
-    prevPosition = currCardMarker;
-    print(currCardMarker.position);
+    prevMarker = currCardMarker;
     currCardMarker = Cursor.instance.transform;
     transform.SetAsLastSibling();
+
+    Cursor.instance.PickUpCard(transform);
+
   }
   public void OnRelease(BaseEventData data)
   {
@@ -71,16 +86,6 @@ public class GUICard : MonoBehaviour
       return;
     }
     isHeld = false;
-    Transform cardMarker = Cursor.instance.GetCardMarker((PointerEventData)data);
-    if (cardMarker != null)
-    {
-      CardsController cc = cardMarker.GetComponentInParent<CardsController>();
-      if (cc.CanAddCard(cardMarker, transform))
-      {
-        GameController.TransferCard(transform, prevPosition, cardMarker);
-        return;
-      }
-    }
-    currCardMarker = prevPosition;
+    Cursor.instance.DropCard((PointerEventData)data, prevMarker, transform);
   }
 }

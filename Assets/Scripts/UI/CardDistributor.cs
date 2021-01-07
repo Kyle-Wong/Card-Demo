@@ -98,4 +98,20 @@ public class CardDistributor : MonoBehaviour
     Destroy(temp.gameObject);
     DistributeCards();
   }
+  public Transform Last()
+  {
+    if (cardMarkers.Count == 0)
+    {
+      return null;
+    }
+    return cardMarkers[cardMarkers.Count - 1];
+  }
+  public Transform First()
+  {
+    if (cardMarkers.Count == 0)
+    {
+      return null;
+    }
+    return cardMarkers[0];
+  }
 }

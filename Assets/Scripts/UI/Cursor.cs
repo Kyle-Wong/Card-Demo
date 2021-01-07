@@ -11,10 +11,13 @@ public class Cursor : MonoBehaviour
   public static Cursor instance;
   Camera mainCamera;
   private const string cardMarkerTag = "CardMarker";
+
+
+  [HideInInspector]
+  public Transform cardHeld;
+
   void Awake()
   {
-    mainCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
-    eventSystem = EventSystem.current;
     if (instance == null)
     {
       instance = this;
@@ -23,6 +26,9 @@ public class Cursor : MonoBehaviour
     {
       Destroy(gameObject);
     }
+    mainCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+    eventSystem = EventSystem.current;
+    cardHeld = null;
   }
 
   // Update is called once per frame
@@ -30,6 +36,31 @@ public class Cursor : MonoBehaviour
   {
     Vector3 mousePosition = mainCamera.ScreenToWorldPoint(Input.mousePosition);
     transform.position = new Vector3(mousePosition.x, mousePosition.y, 0);
+  }
+  public void PickUpCard(Transform card)
+  {
+    cardHeld = card;
+  }
+  public void DropCard(PointerEventData data, Transform prevMarker, Transform card)
+  {
+    /*
+      Raycast from mouse cursor in order to check if there is a valid cardMarker to place
+      the card into. If there is such a marker, transfer the card from its last owner to 
+      the new owner.
+    */
+    cardHeld = null;
+    Transform cardMarker = GetCardMarker((PointerEventData)data);
+    if (cardMarker != null)
+    {
+      CardsController cc = cardMarker.GetComponentInParent<CardsController>();
+      if (cc.CanAddCard(cardMarker, card))
+      {
+        GameController.TransferCard(card, prevMarker, cardMarker);
+        return;
+      }
+    }
+    card.GetComponent<GUICard>().currCardMarker = prevMarker;
+
   }
   private List<RaycastResult> RaycastAll(PointerEventData data)
   {
@@ -51,5 +82,9 @@ public class Cursor : MonoBehaviour
       }
     }
     return null;
+  }
+  public bool IsHoldingCard()
+  {
+    return cardHeld != null;
   }
 }
