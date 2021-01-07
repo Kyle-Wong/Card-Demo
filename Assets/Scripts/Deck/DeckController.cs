@@ -7,15 +7,16 @@ public class DeckController : MonoBehaviour
 {
 
   // Use this for initialization
-  public Transform cardPrefab;
-  Transform cardsParent;
+  private Transform cardPrefab;
+  private Transform cardsParent;
   private Image image;
-  Deck deck;
+  private Deck deck;
   void Start()
   {
     deck = new Deck();
     cardsParent = GameObject.FindGameObjectWithTag("CardList").transform;
     image = GetComponent<Image>();
+    cardPrefab = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>().cardPrefab;
   }
 
   // Update is called once per frame

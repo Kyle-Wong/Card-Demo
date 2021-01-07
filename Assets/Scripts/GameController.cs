@@ -12,6 +12,8 @@ public class GameController : MonoBehaviour
   public HandController hand;
 
   public StackController[] stacks;
+  public Transform cardPrefab;
+  public Transform cardSlotPrefab;
   public int maxHandSize;
 
   //Card fronts are in order from Aces to Kings, with suits in alphabetical order (Clubs->Diamonds->Hearts->Spades)

@@ -5,12 +5,18 @@ using UnityEngine;
 public class SlotDistributor : MonoBehaviour
 {
 
-  // Use this for initialization
+  /*
+    This class controls an array of CardSlots that cards will be placed into.
+    Card slots are arranged in a line. Exact spacing and whether or not it should be centered
+    are public variables.
+    The SlotDistributor only handles cardslot placement and generation, it should NOT know about which slots are filled 
+    or which cards are placed in them.
+  */
   public Vector2 spacing;
   public bool centerX;
   public bool centerY;
 
-  public Transform cardSlotPrefab;
+  private Transform cardSlotPrefab;
   private List<Transform> cardSlots;
   public int numCards
   {
@@ -22,13 +28,15 @@ public class SlotDistributor : MonoBehaviour
   void Awake()
   {
     cardSlots = GetChildren();
-
+    cardSlotPrefab = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>().cardSlotPrefab;
   }
-
+  void Start()
+  {
+  }
   // Update is called once per frame
   void Update()
   {
-    DistributeCards();
+    //DistributeCards();
   }
   private List<Transform> GetChildren()
   {
@@ -39,6 +47,11 @@ public class SlotDistributor : MonoBehaviour
   }
   private void DistributeCards()
   {
+    /*
+      Arranges all CardSlots into a straight line.
+      Can grow around the center by subtracting all positions
+      by half the width and/or height
+    */
     float width = (cardSlots.Count - 1) * spacing.x;
     float height = (cardSlots.Count - 1) * spacing.y;
     if (!centerX)
@@ -110,21 +123,5 @@ public class SlotDistributor : MonoBehaviour
     cardSlots.RemoveAt(index);
     Destroy(temp.gameObject);
     DistributeCards();
-  }
-  public Transform Last()
-  {
-    if (cardSlots.Count == 0)
-    {
-      return null;
-    }
-    return cardSlots[cardSlots.Count - 1];
-  }
-  public Transform First()
-  {
-    if (cardSlots.Count == 0)
-    {
-      return null;
-    }
-    return cardSlots[0];
   }
 }
