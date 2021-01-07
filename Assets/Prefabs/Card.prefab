@@ -24,6 +24,7 @@ GameObject:
   - component: {fileID: 114441311637615916}
   - component: {fileID: 114953645039844906}
   - component: {fileID: 114674914076257628}
+  - component: {fileID: 114541884246071198}
   - component: {fileID: 114012451989465508}
   m_Layer: 5
   m_Name: Card
@@ -153,6 +154,19 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114541884246071198
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1813377119544412}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5c32c6d0813e8240a4a09fa74cbdc89, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tiltScale: {x: 120, y: 120}
+  tiltSpeed: 40
 --- !u!114 &114674914076257628
 MonoBehaviour:
   m_ObjectHideFlags: 1

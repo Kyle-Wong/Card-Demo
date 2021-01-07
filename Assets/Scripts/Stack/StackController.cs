@@ -25,13 +25,13 @@ public class StackController : CardsController
   }
   public override void AddCard(Transform card)
   {
-    cardGroup.AddCard(card.GetComponent<GUICard>().CardData);
+    cardList.AddCard(card.GetComponent<GUICard>().CardData);
     card.GetComponent<GUICard>().currCardMarker = cardDistributor.GetCardMarker(cardDistributor.numCards - 1);
     cardDistributor.AddCardSpace();
   }
   public override void RemoveCard(Transform card)
   {
-    int cardIndex = cardGroup.RemoveCard(card.GetComponent<GUICard>().CardData);
+    int cardIndex = cardList.RemoveCard(card.GetComponent<GUICard>().CardData);
     cardDistributor.RemoveCardSpace(cardIndex);
   }
   public override bool CanAddCard(Transform cardMarker, Transform card)

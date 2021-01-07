@@ -89,10 +89,18 @@ public class GUICard : MonoBehaviour
   }
   public void OnPointerEnter()
   {
+    if (currCardMarker == null)
+    {
+      return;
+    }
     currCardMarker.GetComponent<CardMarker>().cardMarkerOwner.OnPointerEnter(transform, Cursor.instance.cardHeld);
   }
   public void OnPointerExit()
   {
+    if (currCardMarker == null)
+    {
+      return;
+    }
     currCardMarker.GetComponent<CardMarker>().cardMarkerOwner.OnPointerExit(transform, Cursor.instance.cardHeld);
   }
 }

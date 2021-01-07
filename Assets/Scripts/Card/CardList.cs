@@ -50,6 +50,16 @@ public class CardList
     }
     return -1;
   }
+  public void RearrangeCard(int fromIndex, int toIndex)
+  {
+    if (fromIndex == toIndex)
+    {
+      return;
+    }
+    Card card = cardList[fromIndex];
+    cardList.RemoveAt(fromIndex);
+    cardList.Insert(toIndex, card);
+  }
   public override string ToString()
   {
     string s = "";

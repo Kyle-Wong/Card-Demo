@@ -31,6 +31,7 @@ public class HandController : CardsController
     int handCardIndex = cardDistributor.IndexOf(handCardMarker);
     int heldCardIndex = cardDistributor.IndexOf(heldCardMarker);
     print(heldCardIndex + ", " + handCardIndex);
+    cardList.RearrangeCard(heldCardIndex, handCardIndex);
     cardDistributor.RearrangeMarker(heldCardIndex, handCardIndex);
   }
   public override void OnPointerEnter(Transform handCard, Transform heldCard)
@@ -52,12 +53,12 @@ public class HandController : CardsController
 
     Transform cardMarker = cardDistributor.AddCardSpace();
     card.GetComponent<GUICard>().currCardMarker = cardMarker;
-    cardGroup.AddCard(card.GetComponent<GUICard>().CardData);
+    cardList.AddCard(card.GetComponent<GUICard>().CardData);
   }
   public override void RemoveCard(Transform card)
   {
     Card cardData = card.GetComponent<GUICard>().CardData;
-    int cardIndex = cardGroup.RemoveCard(cardData);
+    int cardIndex = cardList.RemoveCard(cardData);
     cardDistributor.RemoveCardSpace(cardIndex);
   }
   public override bool CanAddCard(Transform cardMarker, Transform card)

@@ -23,7 +23,7 @@ public class MoveToMarker : MonoBehaviour
     if (card.isHeld)
     {
       transform.position = Vector3.Lerp(transform.position, cursor.position, moveSpeed * Time.deltaTime);
-      transform.rotation = Quaternion.Lerp(transform.rotation, cursor.rotation, rotationSpeed * Time.deltaTime);
+      //transform.rotation = Quaternion.Lerp(transform.rotation, cursor.rotation, rotationSpeed * Time.deltaTime);
     }
     else if (cardMarker != null)
     {
