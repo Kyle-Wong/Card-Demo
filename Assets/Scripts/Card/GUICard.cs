@@ -8,7 +8,7 @@ public class GUICard : MonoBehaviour
 
   // Use this for initialization
   GameController gameController;
-  private MoveToTarget moveToTarget;
+  public Transform currCardMarker;
   private Card cardData;
   private bool isHeld;
   private Transform prevPosition;
@@ -30,14 +30,12 @@ public class GUICard : MonoBehaviour
   {
     image = transform.GetComponent<Image>();
     gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
-    moveToTarget = GetComponent<MoveToTarget>();
     isHeld = false;
   }
 
   // Update is called once per frame
   void Update()
   {
-
   }
   private void UpdateCard(Card card)
   {
@@ -56,13 +54,14 @@ public class GUICard : MonoBehaviour
   }
   public void OnDrag()
   {
-    if (!moveToTarget.target.GetComponentInParent<CardsController>().CanRemoveCard(moveToTarget.target, transform))
+    if (!currCardMarker.GetComponentInParent<CardsController>().CanRemoveCard(currCardMarker, transform))
     {
       return;
     }
     isHeld = true;
-    prevPosition = moveToTarget.target;
-    moveToTarget.target = Cursor.instance.transform;
+    prevPosition = currCardMarker;
+    print(currCardMarker.position);
+    currCardMarker = Cursor.instance.transform;
     transform.SetAsLastSibling();
   }
   public void OnRelease(BaseEventData data)
@@ -82,6 +81,6 @@ public class GUICard : MonoBehaviour
         return;
       }
     }
-    moveToTarget.target = prevPosition;
+    currCardMarker = prevPosition;
   }
 }

@@ -21,7 +21,7 @@ public class HandController : CardsController
   public override void AddCard(Transform card)
   {
     Transform cardMarker = cardDistributor.AddCardSpace();
-    card.GetComponent<MoveToTarget>().target = cardMarker;
+    card.GetComponent<GUICard>().currCardMarker = cardMarker;
     cardGroup.AddCard(card.GetComponent<GUICard>().CardData);
   }
   public override void RemoveCard(Transform card)

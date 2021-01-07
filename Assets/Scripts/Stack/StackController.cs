@@ -26,7 +26,7 @@ public class StackController : CardsController
   public override void AddCard(Transform card)
   {
     cardGroup.AddCard(card.GetComponent<GUICard>().CardData);
-    card.GetComponent<MoveToTarget>().target = cardDistributor.GetCardMarker(cardDistributor.numCards - 1);
+    card.GetComponent<GUICard>().currCardMarker = cardDistributor.GetCardMarker(cardDistributor.numCards - 1);
     cardDistributor.AddCardSpace();
   }
   public override void RemoveCard(Transform card)
