@@ -8,28 +8,28 @@ public class CardScaler : MonoBehaviour
   /*
 		Makes card bigger when held
 	*/
-  private GUICard card;
-  public float heldScale;
-  public float scaleSpeed;
-  private Vector3 scaleVector;
-  private Vector3 startingScale;
+  private GUICard _card;
+  public float HeldScale;
+  public float ScaleSpeed;
+  private Vector3 _scaleVector;
+  private Vector3 _startingScale;
   void Start()
   {
-    card = GetComponent<GUICard>();
-    scaleVector = new Vector3(heldScale, heldScale, 0);
-    startingScale = transform.localScale;
+    _card = GetComponent<GUICard>();
+    _scaleVector = new Vector3(HeldScale, HeldScale, 0);
+    _startingScale = transform.localScale;
   }
 
   // Update is called once per frame
   void Update()
   {
-    if (card.isHeld)
+    if (_card.IsHeld)
     {
-      transform.localScale = Vector3.Lerp(transform.localScale, scaleVector, scaleSpeed * Time.deltaTime);
+      transform.localScale = Vector3.Lerp(transform.localScale, _scaleVector, ScaleSpeed * Time.deltaTime);
     }
     else
     {
-      transform.localScale = Vector3.Lerp(transform.localScale, startingScale, scaleSpeed * Time.deltaTime);
+      transform.localScale = Vector3.Lerp(transform.localScale, _startingScale, ScaleSpeed * Time.deltaTime);
     }
   }
 }

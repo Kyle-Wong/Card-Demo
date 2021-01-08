@@ -5,41 +5,44 @@ using UnityEngine.EventSystems;
 
 public class Cursor : MonoBehaviour
 {
-
-  // Use this for initialization
-  private EventSystem eventSystem;
-  public static Cursor instance;
-  Camera mainCamera;
-  private const string cardSlotTag = "CardSlot";
+  /*
+    Singleton Class
+    Contains logic used by the mouse cursor when interacting with the game board and the cards.
+    Matches the mouse cursor's position each frame.
+  */
+  private EventSystem _eventSystem;
+  public static Cursor Instance;
+  private Camera _mainCamera;
+  private const string CARD_SLOT_TAG = "CardSlot";
 
 
   [HideInInspector]
-  public Transform cardHeld;
+  public Transform CardHeld;
 
   void Awake()
   {
-    if (instance == null)
+    if (Instance == null)
     {
-      instance = this;
+      Instance = this;
     }
     else
     {
       Destroy(gameObject);
     }
-    mainCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
-    eventSystem = EventSystem.current;
-    cardHeld = null;
+    _mainCamera = Camera.main;
+    _eventSystem = EventSystem.current;
+    CardHeld = null;
   }
 
   // Update is called once per frame
   void Update()
   {
-    Vector3 mousePosition = mainCamera.ScreenToWorldPoint(Input.mousePosition);
+    Vector3 mousePosition = _mainCamera.ScreenToWorldPoint(Input.mousePosition);
     transform.position = new Vector3(mousePosition.x, mousePosition.y, 0);
   }
   public void PickUpCard(Transform card)
   {
-    cardHeld = card;
+    CardHeld = card;
   }
   public void DropCard(PointerEventData data, Transform prevSlot, Transform card)
   {
@@ -48,7 +51,7 @@ public class Cursor : MonoBehaviour
       the card into. If there is such a slot, transfer the card from its last owner to 
       the new owner.
     */
-    cardHeld = null;
+    CardHeld = null;
     Transform cardSlot = GetCardSlot((PointerEventData)data);
     if (cardSlot != null)
     {
@@ -64,7 +67,7 @@ public class Cursor : MonoBehaviour
   private List<RaycastResult> RaycastAll(PointerEventData data)
   {
     List<RaycastResult> hits = new List<RaycastResult>();
-    eventSystem.RaycastAll(data, hits);
+    _eventSystem.RaycastAll(data, hits);
     return hits;
   }
   public Transform GetCardSlot(PointerEventData data)
@@ -75,7 +78,7 @@ public class Cursor : MonoBehaviour
     List<RaycastResult> hits = RaycastAll(data);
     foreach (RaycastResult hit in hits)
     {
-      if (hit.gameObject.CompareTag(cardSlotTag))
+      if (hit.gameObject.CompareTag(CARD_SLOT_TAG))
       {
         return hit.gameObject.transform;
       }
@@ -84,6 +87,6 @@ public class Cursor : MonoBehaviour
   }
   public bool IsHoldingCard()
   {
-    return cardHeld != null;
+    return CardHeld != null;
   }
 }

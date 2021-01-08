@@ -7,16 +7,16 @@ public class DeckController : MonoBehaviour
 {
 
   // Use this for initialization
-  private Transform cardPrefab;
-  private Transform cardsParent;
-  private Image image;
-  private Deck deck;
+  private Transform _cardPrefab;
+  private Transform _cardsParent;
+  private Image _image;
+  private Deck _deck;
   void Start()
   {
-    deck = new Deck();
-    cardsParent = GameObject.FindGameObjectWithTag("CardList").transform;
-    image = GetComponent<Image>();
-    cardPrefab = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>().cardPrefab;
+    _deck = new Deck();
+    _cardsParent = GameObject.FindGameObjectWithTag("CardList").transform;
+    _image = GetComponent<Image>();
+    _cardPrefab = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>().CardPrefab;
   }
 
   // Update is called once per frame
@@ -26,27 +26,27 @@ public class DeckController : MonoBehaviour
   }
   public Transform DrawCard()
   {
-    Card cardData = deck.DrawCard();
-    if (deck.Empty())
+    Card cardData = _deck.DrawCard();
+    if (_deck.Empty())
     {
-      image.enabled = false;
+      _image.enabled = false;
     }
-    Transform card = Object.Instantiate(cardPrefab, transform.position, transform.rotation, cardsParent);
-    card.GetComponent<GUICard>().CardData = cardData;
+    Transform card = Object.Instantiate(_cardPrefab, transform.position, transform.rotation, _cardsParent);
+    card.GetComponent<GUICard>().Card = cardData;
 
     return card;
   }
   public void GetNewDeck()
   {
-    deck = new Deck();
-    image.enabled = true;
+    _deck = new Deck();
+    _image.enabled = true;
   }
   public void Shuffle()
   {
-    deck.Shuffle();
+    _deck.Shuffle();
   }
   public bool Empty()
   {
-    return deck.Empty();
+    return _deck.Empty();
   }
 }

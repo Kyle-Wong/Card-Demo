@@ -11,6 +11,13 @@ public class CardSlot : MonoBehaviour
 		in a given CardSlot.
 	*/
   public CardsController CardSlotOwner;
+  private RectTransform _rectTransform;
+  [HideInInspector]
+  public GUICard _card;
+  void Awake()
+  {
+    _rectTransform = GetComponent<RectTransform>();
+  }
   void Start()
   {
     CardSlotOwner = GetComponentInParent<CardsController>();
@@ -20,6 +27,23 @@ public class CardSlot : MonoBehaviour
   void Update()
   {
 
+  }
+  void OnDrawGizmos()
+  {
+    /*
+      Draw bounding box for card slot
+    */
+    Gizmos.color = Color.green;
+    if (_rectTransform == null)
+    {
+      _rectTransform = GetComponent<RectTransform>();
+    }
+    Vector3[] corners = new Vector3[4];
+    _rectTransform.GetWorldCorners(corners);
+    Gizmos.DrawLine(corners[0], corners[1]);
+    Gizmos.DrawLine(corners[1], corners[2]);
+    Gizmos.DrawLine(corners[2], corners[3]);
+    Gizmos.DrawLine(corners[3], corners[0]);
   }
 
 }

@@ -9,31 +9,31 @@ public class CardTilt : MonoBehaviour
     tiltScale determines how much tilt can occur.
     tiltSpeed determines how quickly the card will tilt.
   */
-  public Vector2 tiltScale;
-  public float tiltSpeed;
-  private GUICard card;
-  private Vector3 prevPosition;
+  public Vector2 TiltScale;
+  public float TiltSpeed;
+  private GUICard _card;
+  private Vector3 _prevPosition;
   void Start()
   {
-    card = GetComponent<GUICard>();
-    prevPosition = transform.position;
+    _card = GetComponent<GUICard>();
+    _prevPosition = transform.position;
   }
 
   // Update is called once per frame
   void Update()
   {
-    if (card.isHeld)
+    if (_card.IsHeld)
     {
-      Vector2 velocity = transform.position - prevPosition;
-      transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(new Vector3(-velocity.y * tiltScale.y, velocity.x * tiltScale.x, 0)), tiltSpeed * Time.deltaTime);
+      Vector2 velocity = transform.position - _prevPosition;
+      transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(new Vector3(-velocity.y * TiltScale.y, velocity.x * TiltScale.x, 0)), TiltSpeed * Time.deltaTime);
     }
     else
     {
       //Return to non-rotated rotation
-      transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.identity, tiltSpeed * Time.deltaTime);
+      transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.identity, TiltSpeed * Time.deltaTime);
     }
     //for tracking card's velocity
-    prevPosition = transform.position;
+    _prevPosition = transform.position;
   }
 }
 

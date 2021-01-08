@@ -11,21 +11,21 @@ public class Deck
     Can be made bottomless to automatically generate a new deck once it empties.
   */
 
-  private Stack<Card> cardStack;
-  private Random rng;
-  private bool bottomless;
+  private Stack<Card> _cardStack;
+  private Random _rng;
+  private bool _bottomless;
   public Deck(int numDecks = 1, bool bottomless = false, int? seed = null)
   {
     if (seed != null)
     {
-      rng = new Random((int)seed);
+      _rng = new Random((int)seed);
     }
     else
     {
-      rng = new Random();
+      _rng = new Random();
     }
-    this.cardStack = this.GenerateDeck(numDecks);
-    this.bottomless = bottomless;
+    this._cardStack = this.GenerateDeck(numDecks);
+    this._bottomless = bottomless;
   }
   public Card DrawCard()
   {
@@ -33,16 +33,16 @@ public class Deck
     {
       return null;
     }
-    Card card = cardStack.Pop();
-    if (Empty() && bottomless)
+    Card card = _cardStack.Pop();
+    if (Empty() && _bottomless)
     {
-      cardStack = GenerateDeck();
+      _cardStack = GenerateDeck();
     }
     return card;
   }
   public bool Empty()
   {
-    return cardStack.Count == 0;
+    return _cardStack.Count == 0;
   }
 
   private Stack<Card> GenerateDeck(int numDecks = 1)
@@ -65,7 +65,7 @@ public class Deck
     List<Card> shuffleList = new List<Card>(deck);
     for (int i = 0; i < shuffleList.Count; i++)
     {
-      int randIndex = rng.Next() % shuffleList.Count;
+      int randIndex = _rng.Next() % shuffleList.Count;
       Card temp = shuffleList[i];
       shuffleList[i] = shuffleList[randIndex];
       shuffleList[randIndex] = temp;
@@ -74,7 +74,7 @@ public class Deck
   }
   public Stack<Card> Shuffle()
   {
-    return ShuffleCards(cardStack);
+    return ShuffleCards(_cardStack);
   }
 
 }

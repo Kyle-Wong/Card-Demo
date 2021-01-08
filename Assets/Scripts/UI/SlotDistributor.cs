@@ -9,26 +9,29 @@ public class SlotDistributor : MonoBehaviour
     This class controls an array of CardSlots that cards will be placed into.
     Card slots are arranged in a line. Exact spacing and whether or not it should be centered
     are public variables.
-    The SlotDistributor only handles cardslot placement and generation, it should NOT know about which slots are filled 
-    or which cards are placed in them.
+    The SlotDistributor only handles cardslot placement and generation, it does not
+    care about the identity of cards.
   */
-  public Vector2 spacing;
-  public bool centerX;
-  public bool centerY;
+  public Vector2 Spacing;
+  public bool CenterX;
+  public bool CenterY;
 
-  private Transform cardSlotPrefab;
-  private List<Transform> cardSlots;
-  public int numCards
+  private Transform _cardSlotPrefab;
+  private List<Transform> _cardSlots;
+  public int SlotCount
   {
     get
     {
-      return cardSlots.Count;
+      return _cardSlots.Count;
     }
   }
   void Awake()
   {
-    cardSlots = GetChildren();
-    cardSlotPrefab = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>().cardSlotPrefab;
+    _cardSlots = GetChildren();
+    _cardSlotPrefab = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>().CardSlotPrefab;
+  }
+  void OnEnable()
+  {
   }
   void Start()
   {
@@ -36,7 +39,7 @@ public class SlotDistributor : MonoBehaviour
   // Update is called once per frame
   void Update()
   {
-    //DistributeCards();
+    DistributeCards();
   }
   private List<Transform> GetChildren()
   {
@@ -52,19 +55,19 @@ public class SlotDistributor : MonoBehaviour
       Can grow around the center by subtracting all positions
       by half the width and/or height
     */
-    float width = (cardSlots.Count - 1) * spacing.x;
-    float height = (cardSlots.Count - 1) * spacing.y;
-    if (!centerX)
+    float width = (_cardSlots.Count - 1) * Spacing.x;
+    float height = (_cardSlots.Count - 1) * Spacing.y;
+    if (!CenterX)
     {
       width = 0;
     }
-    if (!centerY)
+    if (!CenterY)
     {
       height = 0;
     }
-    for (int i = 0; i < cardSlots.Count; i++)
+    for (int i = 0; i < _cardSlots.Count; i++)
     {
-      cardSlots[i].position = new Vector3(transform.position.x + (spacing.x * i - width / 2), transform.position.y + (spacing.y * i - height / 2), cardSlots[i].position.z);
+      _cardSlots[i].position = new Vector3(transform.position.x + (Spacing.x * i - width / 2), transform.position.y + (Spacing.y * i - height / 2), _cardSlots[i].position.z);
     }
   }
   public void RearrangeSlots(int fromIndex, int toIndex)
@@ -76,25 +79,25 @@ public class SlotDistributor : MonoBehaviour
     {
       return;
     }
-    Transform cardSlot = cardSlots[fromIndex];
-    cardSlots.RemoveAt(fromIndex);
-    cardSlots.Insert(toIndex, cardSlot);
-
+    Transform cardSlot = _cardSlots[fromIndex];
+    _cardSlots.RemoveAt(fromIndex);
+    _cardSlots.Insert(toIndex, cardSlot);
+    DistributeCards();
   }
   public Transform GetCardSlot(int index)
   {
-    if (index < 0 || index >= cardSlots.Count)
+    if (index < 0 || index >= _cardSlots.Count)
     {
       Debug.LogWarning("Invalid card get: card at index " + index);
     }
-    return cardSlots[index];
+    return _cardSlots[index];
   }
 
   public int IndexOf(Transform cardSlot)
   {
-    for (int i = 0; i < cardSlots.Count; i++)
+    for (int i = 0; i < _cardSlots.Count; i++)
     {
-      if (cardSlots[i].Equals(cardSlot))
+      if (_cardSlots[i].Equals(cardSlot))
       {
         return i;
       }
@@ -103,24 +106,24 @@ public class SlotDistributor : MonoBehaviour
   }
   public Transform AddCardSpace()
   {
-    Transform newCardSlot = Object.Instantiate(cardSlotPrefab, transform);
-    cardSlots.Add(newCardSlot);
+    Transform newCardSlot = Object.Instantiate(_cardSlotPrefab, transform);
+    _cardSlots.Add(newCardSlot);
     DistributeCards();
     return newCardSlot;
   }
   public void RemoveCardSpace(int index)
   {
-    if (cardSlots.Count <= 0)
+    if (_cardSlots.Count <= 0)
     {
       return;
     }
-    if (index < 0 || index >= cardSlots.Count)
+    if (index < 0 || index >= _cardSlots.Count)
     {
       Debug.LogWarning("Invalid card removal: card at index " + index);
     }
 
-    Transform temp = cardSlots[index];
-    cardSlots.RemoveAt(index);
+    Transform temp = _cardSlots[index];
+    _cardSlots.RemoveAt(index);
     Destroy(temp.gameObject);
     DistributeCards();
   }

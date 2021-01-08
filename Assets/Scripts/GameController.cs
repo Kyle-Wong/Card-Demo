@@ -7,18 +7,21 @@ using UnityEngine.UI;
 public class GameController : MonoBehaviour
 {
 
-  // Use this for initialization
-  public DeckController deck;
-  public HandController hand;
+  /*
+    Contains game logic and controls how and when the player can interact with cards, depending on the game rules.
+    Contains card sprites and references to the different game-relevant entities like Deck and Hand.
+  */
+  public DeckController Deck;
+  public HandController Hand;
 
-  public StackController[] stacks;
-  public Transform cardPrefab;
-  public Transform cardSlotPrefab;
-  public int maxHandSize;
+  public StackController[] Stacks;
+  public Transform CardPrefab;
+  public Transform CardSlotPrefab;
+  public int MaxHandSize;
 
   //Card fronts are in order from Aces to Kings, with suits in alphabetical order (Clubs->Diamonds->Hearts->Spades)
-  public Sprite[] cardFronts;
-  public Sprite cardBack;
+  public Sprite[] CardFronts;
+  public Sprite CardBack;
   void Awake()
   {
   }
@@ -33,14 +36,20 @@ public class GameController : MonoBehaviour
   }
   private void DrawCard()
   {
-    if (!deck.Empty())
+    /*
+      Add a card from the Deck to Hand
+    */
+    if (!Deck.Empty())
     {
-      Transform newCard = deck.DrawCard();
-      hand.AddCard(newCard);
+      Transform newCard = Deck.DrawCard();
+      Hand.AddCard(newCard);
     }
   }
   public static void TransferCard(Transform card, Transform source, Transform destination)
   {
+    /*
+      Transfer a card from one CardsController to another
+    */
     source.GetComponentInParent<CardsController>().RemoveCard(card);
     destination.GetComponentInParent<CardsController>().AddCard(card);
   }

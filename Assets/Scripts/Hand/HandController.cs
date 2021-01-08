@@ -6,14 +6,14 @@ public class HandController : CardsController
 {
 
   // Use this for initialization
-  SlotDistributor cardDistributor;
+  private SlotDistributor _slotDistributor;
   protected override void Awake()
   {
     base.Awake();
   }
   void Start()
   {
-    cardDistributor = GetComponent<SlotDistributor>();
+    _slotDistributor = GetComponent<SlotDistributor>();
   }
 
   public void ShiftCard(Transform handCardSlot, Transform heldCardSlot)
@@ -28,19 +28,19 @@ public class HandController : CardsController
       //Do nothing if both card slot are the same
       return;
     }
-    int handCardIndex = cardDistributor.IndexOf(handCardSlot);
-    int heldCardIndex = cardDistributor.IndexOf(heldCardSlot);
-    cardList.RearrangeCards(heldCardIndex, handCardIndex);
-    cardDistributor.RearrangeSlots(heldCardIndex, handCardIndex);
+    int handCardIndex = _slotDistributor.IndexOf(handCardSlot);
+    int heldCardIndex = _slotDistributor.IndexOf(heldCardSlot);
+    _cardList.RearrangeCards(heldCardIndex, handCardIndex);
+    _slotDistributor.RearrangeSlots(heldCardIndex, handCardIndex);
   }
   public override void OnPointerEnter(Transform handCard, Transform heldCard)
   {
-    if (heldCard == null)
+    if (heldCard == null || heldCard.GetComponent<GUICard>() == null)
     {
       return;
     }
-    Transform heldCardSlot = heldCard.GetComponent<GUICard>().currCardSlot;
-    Transform handCardSlot = handCard.GetComponent<GUICard>().currCardSlot;
+    Transform heldCardSlot = heldCard.GetComponent<GUICard>().CardSlot;
+    Transform handCardSlot = handCard.GetComponent<GUICard>().CardSlot;
     if (heldCardSlot.GetComponentInParent<HandController>() != null)
     {
       //Only shift cards if the held card is also from hand.
@@ -50,15 +50,15 @@ public class HandController : CardsController
   public override void AddCard(Transform card)
   {
 
-    Transform cardSlot = cardDistributor.AddCardSpace();
-    card.GetComponent<GUICard>().currCardSlot = cardSlot;
-    cardList.AddCard(card.GetComponent<GUICard>().CardData);
+    Transform cardSlot = _slotDistributor.AddCardSpace();
+    card.GetComponent<GUICard>().CardSlot = cardSlot;
+    _cardList.AddCard(card.GetComponent<GUICard>().Card);
   }
   public override void RemoveCard(Transform card)
   {
-    Card cardData = card.GetComponent<GUICard>().CardData;
-    int cardIndex = cardList.RemoveCard(cardData);
-    cardDistributor.RemoveCardSpace(cardIndex);
+    Card cardData = card.GetComponent<GUICard>().Card;
+    int cardIndex = _cardList.RemoveCard(cardData);
+    _slotDistributor.RemoveCardSpace(cardIndex);
   }
   public override bool CanAddCard(Transform cardSlot, Transform card)
   {
