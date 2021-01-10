@@ -72,7 +72,7 @@ public class GUICard : MonoBehaviour
     /*
       Get sprite index matching card's suit and rank stored in gameController
     */
-    return (_card._value - 1) * 4 + _card._suit;
+    return (_card.Value - 1) * 4 + _card.Suit;
   }
   public void OnDrag()
   {

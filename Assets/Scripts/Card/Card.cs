@@ -11,28 +11,32 @@ public class Card
   public static readonly string[] SuitTypes = { "Clubs", "Diamonds", "Hearts", "Spades" };
   public static readonly string[] ValueNames = { "Ace", "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King" };
 
-  public int _suit;
-  public int _value;
+  public int Suit;
+  public int Value;
 
   public Card(int suit, int value)
   {
-    this._suit = suit;
-    this._value = value;
+    this.Suit = suit;
+    this.Value = value;
   }
   public string SuitType()
   {
-    return SuitTypes[_suit];
+    return SuitTypes[Suit];
   }
   public string ValueName()
   {
-    return ValueNames[_value - 1];
+    return ValueNames[Value - 1];
   }
   public override string ToString()
   {
     return ValueName() + " of " + SuitType();
   }
+  public int Color(){
+    //1 if red, 0 if black
+    return Suit == 1 || Suit == 2 ? 1 : 0;
+  }
   public bool Equals(Card other)
   {
-    return this._suit == other._suit && this._value == other._value;
+    return this.Suit == other.Suit && this.Value == other.Value;
   }
 }

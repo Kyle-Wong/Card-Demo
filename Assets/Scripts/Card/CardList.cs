@@ -9,7 +9,13 @@ public class CardList
     on groups of cards.
   */
   private List<Card> _cardList;
-
+  public int Count
+  {
+    get
+    {
+      return _cardList.Count;
+    }
+  }
   public CardList()
   {
     _cardList = new List<Card>();
@@ -75,5 +81,9 @@ public class CardList
       s += _cardList[i] + ", ";
     }
     return s;
+  }
+  public Card Last()
+  {
+    return _cardList.Count > 0 ? _cardList[_cardList.Count - 1] : null;
   }
 }

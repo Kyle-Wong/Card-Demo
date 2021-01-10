@@ -6,7 +6,7 @@ public class StackController : CardsController
 {
 
   // Use this for initialization
-  private SlotDistributor _slotDistributor;
+  protected SlotDistributor _slotDistributor;
 
   protected override void Awake()
   {
