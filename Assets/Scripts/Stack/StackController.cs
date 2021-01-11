@@ -25,13 +25,13 @@ public class StackController : CardsController
   }
   public override void AddCard(GUICard card)
   {
-    _cardList.AddCard(card.GetComponent<GUICard>().CardData);
+    CardList.AddCard(card.GetComponent<GUICard>().CardData);
     card.CardSlot = _slotDistributor.GetCardSlot(_slotDistributor.SlotCount - 1);
     _slotDistributor.AddCardSlot();
   }
   public override void RemoveCard(GUICard card)
   {
-    int cardIndex = _cardList.RemoveCard(card.CardData);
+    int cardIndex = CardList.RemoveCard(card.CardData);
     _slotDistributor.RemoveCardSpace(cardIndex);
   }
   public override bool CanAddCard(CardSlot cardSlot, GUICard card)
@@ -44,5 +44,8 @@ public class StackController : CardsController
     //second-to-last card slot is the last card added
     return _slotDistributor.IndexOf(cardSlot) == _slotDistributor.SlotCount - 2;
   }
-
+  public virtual CardSlot GetOpenSlot()
+  {
+    return _slotDistributor.GetCardSlot(_slotDistributor.SlotCount - 1);
+  }
 }

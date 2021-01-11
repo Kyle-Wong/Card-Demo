@@ -30,7 +30,7 @@ public class HandController : CardsController
     }
     int handCardIndex = _slotDistributor.IndexOf(handCardSlot);
     int heldCardIndex = _slotDistributor.IndexOf(heldCardSlot);
-    _cardList.RearrangeCards(heldCardIndex, handCardIndex);
+    CardList.RearrangeCards(heldCardIndex, handCardIndex);
     _slotDistributor.RearrangeSlots(heldCardIndex, handCardIndex);
   }
   public override void OnPointerEnter(CardSlot cardSlot, GUICard heldCard)
@@ -51,11 +51,11 @@ public class HandController : CardsController
 
     CardSlot cardSlot = _slotDistributor.AddCardSlot().GetComponent<CardSlot>();
     card.CardSlot = cardSlot;
-    _cardList.AddCard(card.CardData);
+    CardList.AddCard(card.CardData);
   }
   public override void RemoveCard(GUICard card)
   {
-    int cardIndex = _cardList.RemoveCard(card.CardData);
+    int cardIndex = CardList.RemoveCard(card.CardData);
     _slotDistributor.RemoveCardSpace(cardIndex);
   }
   public override bool CanAddCard(CardSlot cardSlot, GUICard card)

@@ -15,8 +15,8 @@ public class TableauStack : StackController
       print("no move");
       return false;
     }
-    print(card.GetComponent<GUICard>().CardData.ToString() + ", " + _cardList.Last().ToString());
-    return Solitaire.ValidMove(card.GetComponent<GUICard>().CardData, _cardList, Solitaire.Location.Tableau);
+    print(card.GetComponent<GUICard>().CardData.ToString() + ", " + CardList.Last().ToString());
+    return Solitaire.ValidMove(card.GetComponent<GUICard>().CardData, CardList, Solitaire.Location.Tableau);
   }
 
   public override bool CanRemoveCard(CardSlot cardSlot, GUICard card)

@@ -127,6 +127,7 @@ public class GUICard : MonoBehaviour
     /*
       Behavior determined by type of CardController that owns this slot
     */
+    Cursor.Instance.CardUnderCursor = this;
     if (CardSlot == null)
     {
       return;
@@ -138,6 +139,8 @@ public class GUICard : MonoBehaviour
     /*
       Behavior determined by type of CardController that owns this slot
     */
+    if (Cursor.Instance.CardUnderCursor == this)
+      Cursor.Instance.CardUnderCursor = null;
     if (CardSlot == null)
     {
       return;

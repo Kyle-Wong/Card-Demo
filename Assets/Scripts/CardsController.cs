@@ -14,11 +14,11 @@ public abstract class CardsController : MonoBehaviour
 		If a card can be played from hand, for example, it should RemoveCard from hand
 		and AddCard to destination.
 	*/
-  protected CardList _cardList;
+  public CardList CardList;
 
   protected virtual void Awake()
   {
-    _cardList = new CardList();
+    CardList = new CardList();
   }
 
   public abstract void AddCard(GUICard card);

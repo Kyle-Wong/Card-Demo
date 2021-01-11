@@ -9,7 +9,7 @@ public class FoundationStack : StackController
     //Can only add cards to the top of the stack and if it is a valid move
     if (_slotDistributor.IndexOf(cardSlot) != _slotDistributor.SlotCount - 1)
       return false;
-    return Solitaire.ValidMove(card.CardData, _cardList, Solitaire.Location.Foundation);
+    return Solitaire.ValidMove(card.CardData, CardList, Solitaire.Location.Foundation);
   }
 
   public override bool CanRemoveCard(CardSlot cardSlot, GUICard card)
@@ -20,7 +20,7 @@ public class FoundationStack : StackController
   }
   public bool Completed()
   {
-    return _cardList.Count == 13;
+    return CardList.Count == 13;
   }
 
 }

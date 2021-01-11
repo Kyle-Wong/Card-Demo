@@ -18,6 +18,8 @@ public class Cursor : MonoBehaviour
 
   [HideInInspector]
   public GUICard CardHeld;
+  [HideInInspector]
+  public GUICard CardUnderCursor;
 
   void Awake()
   {

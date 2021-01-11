@@ -28,6 +28,8 @@ public class GameController : MonoBehaviour
   public Sprite CardBack;
 
   private float _timeBetweenDraws = 0.1f;
+  private List<CardSlot> _highlightedSlots;
+  public Color ValidMoveColor;
 
   void Awake()
   {
@@ -40,10 +42,17 @@ public class GameController : MonoBehaviour
   // Update is called once per frame
   void Update()
   {
+    switch (GameState)
+    {
+      case GameState.Playing:
+        HighlightValidMoves();
+        break;
+    }
   }
   public void Restart()
   {
     GameState = GameState.Initializing;
+    _highlightedSlots = null;
     StartCoroutine(InitializeGame(_timeBetweenDraws));
   }
   private IEnumerator InitializeGame(float timeBetweenDraws)
@@ -70,5 +79,55 @@ public class GameController : MonoBehaviour
     */
     source.GetComponentInParent<CardsController>().RemoveCard(card);
     destination.GetComponentInParent<CardsController>().AddCard(card);
+  }
+  public List<CardSlot> GetValidMoves(GUICard heldCard)
+  {
+
+    List<CardSlot> validMoves = new List<CardSlot>();
+    if (heldCard == null)
+    {
+      return validMoves;
+    }
+    for (int i = 0; i < TableauStacks.Length; i++)
+    {
+      if (Solitaire.ValidMove(heldCard.CardData, TableauStacks[i].CardList, Solitaire.Location.Tableau))
+      {
+        validMoves.Add(TableauStacks[i].GetOpenSlot());
+      }
+    }
+    for (int i = 0; i < FoundationStacks.Length; i++)
+    {
+      if (Solitaire.ValidMove(heldCard.CardData, FoundationStacks[i].CardList, Solitaire.Location.Foundation))
+      {
+        validMoves.Add(FoundationStacks[i].GetOpenSlot());
+      }
+    }
+    return validMoves;
+  }
+  private void HighlightValidMoves()
+  {
+    if (Cursor.Instance.CardUnderCursor != null)
+    {
+      if (_highlightedSlots == null)
+      {
+        _highlightedSlots = GetValidMoves(Cursor.Instance.CardUnderCursor);
+        foreach (CardSlot cs in _highlightedSlots)
+        {
+          cs.transform.GetChild(0).GetComponent<Image>().color = ValidMoveColor;
+        }
+      }
+
+    }
+    else
+    {
+      if (_highlightedSlots != null)
+      {
+        foreach (CardSlot cs in _highlightedSlots)
+        {
+          cs.transform.GetChild(0).GetComponent<Image>().color = Color.clear;
+        }
+        _highlightedSlots = null;
+      }
+    }
   }
 }
