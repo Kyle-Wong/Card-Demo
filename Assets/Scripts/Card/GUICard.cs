@@ -8,8 +8,8 @@ public class GUICard : MonoBehaviour
 
   // Use this for initialization
   private GameController _gameController;
-  private Transform _cardSlot;
-  public Transform CardSlot
+  private CardSlot _cardSlot;
+  public CardSlot CardSlot
   {
     get
     {
@@ -19,40 +19,56 @@ public class GUICard : MonoBehaviour
     {
       if (_cardSlot != null)
       {
-        _cardSlot.GetComponent<CardSlot>()._card = null;
+        _cardSlot.GetComponent<CardSlot>().Card = null;
       }
       _cardSlot = value;
+      _cardSlot.GetComponent<CardSlot>().Card = this;
     }
   }
-  private Card _card;
+  private Card _cardData;
   [HideInInspector]
   public bool IsHeld;
-  public Card Card
+  public Card CardData
   {
     get
     {
-      return _card;
+      return _cardData;
     }
     set
     {
-      _card = value;
-      UpdateCard(value);
+      _cardData = value;
+      UpdateImage();
     }
   }
   private Image _image;
-  public bool FaceUp = true;
+  private bool _faceUp;
+  public bool FaceUp
+  {
+    get
+    {
+      return _faceUp;
+    }
+    set
+    {
+      _faceUp = value;
+      UpdateImage();
+    }
+  }
   void Awake()
   {
     _image = transform.GetComponent<Image>();
     _gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
     IsHeld = false;
   }
+  void Start()
+  {
+  }
 
   // Update is called once per frame
   void Update()
   {
   }
-  private void UpdateCard(Card card)
+  private void UpdateImage()
   {
     /*
       If card is faceup, get the correct sprite for the card's suit and rank
@@ -72,7 +88,7 @@ public class GUICard : MonoBehaviour
     /*
       Get sprite index matching card's suit and rank stored in gameController
     */
-    return (_card.Value - 1) * 4 + _card.Suit;
+    return (_cardData.Value - 1) * 4 + _cardData.Suit;
   }
   public void OnDrag()
   {
@@ -81,7 +97,7 @@ public class GUICard : MonoBehaviour
       Save the current CardSlot to return the card to its last valid location if needed.
       Set as last sibling to ensure card draws above all others.
     */
-    if (_cardSlot == null || !_cardSlot.GetComponentInParent<CardsController>().CanRemoveCard(_cardSlot, transform))
+    if (CardSlot == null || CardSlot.CardSlotOwner == null || !CardSlot.CardSlotOwner.CanRemoveCard(CardSlot, this))
     {
       return;
     }
@@ -89,7 +105,7 @@ public class GUICard : MonoBehaviour
     _image.raycastTarget = false;
     transform.SetAsLastSibling();
 
-    Cursor.Instance.PickUpCard(transform);
+    Cursor.Instance.PickUpCard(this);
 
   }
   public void OnRelease(BaseEventData data)
@@ -104,28 +120,28 @@ public class GUICard : MonoBehaviour
     }
     IsHeld = false;
     _image.raycastTarget = true;
-    Cursor.Instance.DropCard((PointerEventData)data, _cardSlot, transform);
+    Cursor.Instance.DropCard((PointerEventData)data, CardSlot, this);
   }
   public void OnPointerEnter()
   {
     /*
       Behavior determined by type of CardController that owns this slot
     */
-    if (_cardSlot == null)
+    if (CardSlot == null)
     {
       return;
     }
-    _cardSlot.GetComponent<CardSlot>().CardSlotOwner.OnPointerEnter(transform, Cursor.Instance.CardHeld);
+    CardSlot.CardSlotOwner.OnPointerEnter(CardSlot, Cursor.Instance.CardHeld);
   }
   public void OnPointerExit()
   {
     /*
       Behavior determined by type of CardController that owns this slot
     */
-    if (_cardSlot == null)
+    if (CardSlot == null)
     {
       return;
     }
-    _cardSlot.GetComponent<CardSlot>().CardSlotOwner.OnPointerExit(transform, Cursor.Instance.CardHeld);
+    CardSlot.CardSlotOwner.OnPointerExit(CardSlot, Cursor.Instance.CardHeld);
   }
 }

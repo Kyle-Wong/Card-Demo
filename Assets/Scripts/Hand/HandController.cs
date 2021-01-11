@@ -16,7 +16,7 @@ public class HandController : CardsController
     _slotDistributor = GetComponent<SlotDistributor>();
   }
 
-  public void ShiftCard(Transform handCardSlot, Transform heldCardSlot)
+  public void ShiftCard(CardSlot handCardSlot, CardSlot heldCardSlot)
   {
     /*
       If the player is holding a card and hovers over a card in hand,
@@ -33,38 +33,36 @@ public class HandController : CardsController
     _cardList.RearrangeCards(heldCardIndex, handCardIndex);
     _slotDistributor.RearrangeSlots(heldCardIndex, handCardIndex);
   }
-  public override void OnPointerEnter(Transform handCard, Transform heldCard)
+  public override void OnPointerEnter(CardSlot cardSlot, GUICard heldCard)
   {
-    if (heldCard == null || heldCard.GetComponent<GUICard>() == null)
+    if (heldCard == null)
     {
       return;
     }
-    Transform heldCardSlot = heldCard.GetComponent<GUICard>().CardSlot;
-    Transform handCardSlot = handCard.GetComponent<GUICard>().CardSlot;
+    CardSlot heldCardSlot = heldCard.CardSlot;
     if (heldCardSlot.GetComponentInParent<HandController>() != null)
     {
       //Only shift cards if the held card is also from hand.
-      ShiftCard(handCardSlot, heldCardSlot);
+      ShiftCard(cardSlot, heldCardSlot);
     }
   }
-  public override void AddCard(Transform card)
+  public override void AddCard(GUICard card)
   {
 
-    Transform cardSlot = _slotDistributor.AddCardSpace();
-    card.GetComponent<GUICard>().CardSlot = cardSlot;
-    _cardList.AddCard(card.GetComponent<GUICard>().Card);
+    CardSlot cardSlot = _slotDistributor.AddCardSlot().GetComponent<CardSlot>();
+    card.CardSlot = cardSlot;
+    _cardList.AddCard(card.CardData);
   }
-  public override void RemoveCard(Transform card)
+  public override void RemoveCard(GUICard card)
   {
-    Card cardData = card.GetComponent<GUICard>().Card;
-    int cardIndex = _cardList.RemoveCard(cardData);
+    int cardIndex = _cardList.RemoveCard(card.CardData);
     _slotDistributor.RemoveCardSpace(cardIndex);
   }
-  public override bool CanAddCard(Transform cardSlot, Transform card)
+  public override bool CanAddCard(CardSlot cardSlot, GUICard card)
   {
     return false; //add cards through drawing from deck
   }
-  public override bool CanRemoveCard(Transform cardSlot, Transform card)
+  public override bool CanRemoveCard(CardSlot cardSlot, GUICard card)
   {
     return true; //true for testing purposes
   }

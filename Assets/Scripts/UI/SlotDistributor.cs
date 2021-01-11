@@ -17,7 +17,7 @@ public class SlotDistributor : MonoBehaviour
   public bool CenterY;
 
   private Transform _cardSlotPrefab;
-  private List<Transform> _cardSlots;
+  private List<CardSlot> _cardSlots;
   public int SlotCount
   {
     get
@@ -27,7 +27,7 @@ public class SlotDistributor : MonoBehaviour
   }
   void Awake()
   {
-    _cardSlots = GetChildren();
+    _cardSlots = new List<CardSlot>();
     _cardSlotPrefab = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>().CardSlotPrefab;
   }
   void OnEnable()
@@ -40,13 +40,6 @@ public class SlotDistributor : MonoBehaviour
   void Update()
   {
     DistributeCards();
-  }
-  private List<Transform> GetChildren()
-  {
-    List<Transform> children = new List<Transform>();
-    foreach (Transform child in transform)
-      children.Add(child);
-    return children;
   }
   private void DistributeCards()
   {
@@ -67,7 +60,7 @@ public class SlotDistributor : MonoBehaviour
     }
     for (int i = 0; i < _cardSlots.Count; i++)
     {
-      _cardSlots[i].position = new Vector3(transform.position.x + (Spacing.x * i - width / 2), transform.position.y + (Spacing.y * i - height / 2), _cardSlots[i].position.z);
+      _cardSlots[i].transform.position = new Vector3(transform.position.x + (Spacing.x * i - width / 2), transform.position.y + (Spacing.y * i - height / 2), _cardSlots[i].transform.position.z);
     }
   }
   public void RearrangeSlots(int fromIndex, int toIndex)
@@ -79,12 +72,12 @@ public class SlotDistributor : MonoBehaviour
     {
       return;
     }
-    Transform cardSlot = _cardSlots[fromIndex];
+    CardSlot cardSlot = _cardSlots[fromIndex];
     _cardSlots.RemoveAt(fromIndex);
     _cardSlots.Insert(toIndex, cardSlot);
     DistributeCards();
   }
-  public Transform GetCardSlot(int index)
+  public CardSlot GetCardSlot(int index)
   {
     if (index < 0 || index >= _cardSlots.Count)
     {
@@ -93,7 +86,7 @@ public class SlotDistributor : MonoBehaviour
     return _cardSlots[index];
   }
 
-  public int IndexOf(Transform cardSlot)
+  public int IndexOf(CardSlot cardSlot)
   {
     for (int i = 0; i < _cardSlots.Count; i++)
     {
@@ -104,12 +97,12 @@ public class SlotDistributor : MonoBehaviour
     }
     return -1;
   }
-  public Transform AddCardSpace()
+  public CardSlot AddCardSlot()
   {
     Transform newCardSlot = Object.Instantiate(_cardSlotPrefab, transform);
-    _cardSlots.Add(newCardSlot);
+    _cardSlots.Add(newCardSlot.GetComponent<CardSlot>());
     DistributeCards();
-    return newCardSlot;
+    return newCardSlot.GetComponent<CardSlot>();
   }
   public void RemoveCardSpace(int index)
   {
@@ -122,7 +115,7 @@ public class SlotDistributor : MonoBehaviour
       Debug.LogWarning("Invalid card removal: card at index " + index);
     }
 
-    Transform temp = _cardSlots[index];
+    CardSlot temp = _cardSlots[index];
     _cardSlots.RemoveAt(index);
     Destroy(temp.gameObject);
     DistributeCards();

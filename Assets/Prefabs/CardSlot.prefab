@@ -89,3 +89,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CardSlotOwner: {fileID: 0}
+  _card: {fileID: 0}

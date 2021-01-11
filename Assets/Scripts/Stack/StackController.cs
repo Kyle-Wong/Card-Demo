@@ -15,7 +15,7 @@ public class StackController : CardsController
   void Start()
   {
     _slotDistributor = GetComponent<SlotDistributor>();
-    _slotDistributor.AddCardSpace();
+    _slotDistributor.AddCardSlot();
   }
 
   // Update is called once per frame
@@ -23,23 +23,23 @@ public class StackController : CardsController
   {
 
   }
-  public override void AddCard(Transform card)
+  public override void AddCard(GUICard card)
   {
-    _cardList.AddCard(card.GetComponent<GUICard>().Card);
-    card.GetComponent<GUICard>().CardSlot = _slotDistributor.GetCardSlot(_slotDistributor.SlotCount - 1);
-    _slotDistributor.AddCardSpace();
+    _cardList.AddCard(card.GetComponent<GUICard>().CardData);
+    card.CardSlot = _slotDistributor.GetCardSlot(_slotDistributor.SlotCount - 1);
+    _slotDistributor.AddCardSlot();
   }
-  public override void RemoveCard(Transform card)
+  public override void RemoveCard(GUICard card)
   {
-    int cardIndex = _cardList.RemoveCard(card.GetComponent<GUICard>().Card);
+    int cardIndex = _cardList.RemoveCard(card.CardData);
     _slotDistributor.RemoveCardSpace(cardIndex);
   }
-  public override bool CanAddCard(Transform cardSlot, Transform card)
+  public override bool CanAddCard(CardSlot cardSlot, GUICard card)
   {
     //Last card slot is always empty
     return _slotDistributor.IndexOf(cardSlot) == _slotDistributor.SlotCount - 1;
   }
-  public override bool CanRemoveCard(Transform cardSlot, Transform card)
+  public override bool CanRemoveCard(CardSlot cardSlot, GUICard card)
   {
     //second-to-last card slot is the last card added
     return _slotDistributor.IndexOf(cardSlot) == _slotDistributor.SlotCount - 2;

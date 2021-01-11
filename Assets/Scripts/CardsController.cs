@@ -21,16 +21,16 @@ public abstract class CardsController : MonoBehaviour
     _cardList = new CardList();
   }
 
-  public abstract void AddCard(Transform card);
-  public abstract void RemoveCard(Transform card);
-  public abstract bool CanAddCard(Transform cardSlot, Transform card);
-  public abstract bool CanRemoveCard(Transform cardSlot, Transform card);
+  public abstract void AddCard(GUICard card);
+  public abstract void RemoveCard(GUICard card);
+  public abstract bool CanAddCard(CardSlot cardSlot, GUICard card);
+  public abstract bool CanRemoveCard(CardSlot cardSlot, GUICard card);
 
-  public virtual void OnPointerEnter(Transform cardSlot, Transform card)
+  public virtual void OnPointerEnter(CardSlot cardSlot, GUICard card)
   {
     return;
   }
-  public virtual void OnPointerExit(Transform cardSlot, Transform card)
+  public virtual void OnPointerExit(CardSlot cardSlot, GUICard card)
   {
     return;
   }

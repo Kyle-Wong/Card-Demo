@@ -13,7 +13,7 @@ public class CardSlot : MonoBehaviour
   public CardsController CardSlotOwner;
   private RectTransform _rectTransform;
   [HideInInspector]
-  public GUICard _card;
+  public GUICard Card;
   void Awake()
   {
     _rectTransform = GetComponent<RectTransform>();

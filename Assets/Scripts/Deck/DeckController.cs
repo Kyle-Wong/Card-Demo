@@ -32,7 +32,7 @@ public class DeckController : MonoBehaviour
       _image.enabled = false;
     }
     Transform card = Object.Instantiate(_cardPrefab, transform.position, transform.rotation, _cardsParent);
-    card.GetComponent<GUICard>().Card = cardData;
+    card.GetComponent<GUICard>().CardData = cardData;
 
     return card;
   }

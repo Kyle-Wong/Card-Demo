@@ -17,7 +17,7 @@ public class Cursor : MonoBehaviour
 
 
   [HideInInspector]
-  public Transform CardHeld;
+  public GUICard CardHeld;
 
   void Awake()
   {
@@ -40,11 +40,11 @@ public class Cursor : MonoBehaviour
     Vector3 mousePosition = _mainCamera.ScreenToWorldPoint(Input.mousePosition);
     transform.position = new Vector3(mousePosition.x, mousePosition.y, 0);
   }
-  public void PickUpCard(Transform card)
+  public void PickUpCard(GUICard card)
   {
     CardHeld = card;
   }
-  public void DropCard(PointerEventData data, Transform prevSlot, Transform card)
+  public void DropCard(PointerEventData data, CardSlot prevSlot, GUICard card)
   {
     /*
       Raycast from mouse cursor in order to check if there is a valid cardSlot to place
@@ -52,7 +52,7 @@ public class Cursor : MonoBehaviour
       the new owner.
     */
     CardHeld = null;
-    Transform cardSlot = GetCardSlot((PointerEventData)data);
+    CardSlot cardSlot = GetCardSlot((PointerEventData)data);
     if (cardSlot != null)
     {
       CardsController cc = cardSlot.GetComponentInParent<CardsController>();
@@ -70,7 +70,7 @@ public class Cursor : MonoBehaviour
     _eventSystem.RaycastAll(data, hits);
     return hits;
   }
-  public Transform GetCardSlot(PointerEventData data)
+  public CardSlot GetCardSlot(PointerEventData data)
   {
     /*
       Return the first cardSlot under the mouse cursor, or null if none are found
@@ -80,7 +80,7 @@ public class Cursor : MonoBehaviour
     {
       if (hit.gameObject.CompareTag(CARD_SLOT_TAG))
       {
-        return hit.gameObject.transform;
+        return hit.gameObject.GetComponent<CardSlot>();
       }
     }
     return null;

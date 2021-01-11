@@ -31,9 +31,10 @@ public class Card
   {
     return ValueName() + " of " + SuitType();
   }
-  public int Color(){
+  public int Color()
+  {
     //1 if red, 0 if black
-    return Suit == 1 || Suit == 2 ? 1 : 0;
+    return (Suit == 1 || Suit == 2) ? 1 : 0;
   }
   public bool Equals(Card other)
   {

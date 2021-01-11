@@ -19,7 +19,7 @@ public class MoveToSlot : MonoBehaviour
   // Update is called once per frame
   void Update()
   {
-    Transform cardSlot = _card.CardSlot;
+    Transform cardSlot = _card.CardSlot.transform;
     if (_card.IsHeld)
     {
       transform.position = Vector3.Lerp(transform.position, _cursor.position, MoveSpeed * Time.deltaTime);
