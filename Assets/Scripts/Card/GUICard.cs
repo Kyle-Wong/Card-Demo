@@ -126,8 +126,10 @@ public class GUICard : MonoBehaviour
   {
     /*
       Behavior determined by type of CardController that owns this slot
+      Mark this card as the one under the cursor
     */
-    Cursor.Instance.CardUnderCursor = this;
+    if (FaceUp)
+      Cursor.Instance.CardUnderCursor = this;
     if (CardSlot == null)
     {
       return;
@@ -138,6 +140,7 @@ public class GUICard : MonoBehaviour
   {
     /*
       Behavior determined by type of CardController that owns this slot
+      Unmark this card as the one under the cursor
     */
     if (Cursor.Instance.CardUnderCursor == this)
       Cursor.Instance.CardUnderCursor = null;

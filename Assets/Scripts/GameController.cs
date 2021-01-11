@@ -106,11 +106,15 @@ public class GameController : MonoBehaviour
   }
   private void HighlightValidMoves()
   {
-    if (Cursor.Instance.CardUnderCursor != null)
+    if (Cursor.Instance.CardUnderCursor != null || Cursor.Instance.IsHoldingCard())
     {
       if (_highlightedSlots == null)
       {
-        _highlightedSlots = GetValidMoves(Cursor.Instance.CardUnderCursor);
+        if (Cursor.Instance.IsHoldingCard())
+          _highlightedSlots = GetValidMoves(Cursor.Instance.CardHeld);
+        else
+          _highlightedSlots = GetValidMoves(Cursor.Instance.CardUnderCursor);
+
         foreach (CardSlot cs in _highlightedSlots)
         {
           cs.transform.GetChild(0).GetComponent<Image>().color = ValidMoveColor;

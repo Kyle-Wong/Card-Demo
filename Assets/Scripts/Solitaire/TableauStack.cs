@@ -12,7 +12,6 @@ public class TableauStack : StackController
       return false;
     if (card.CardSlot.CardSlotOwner == cardSlot.CardSlotOwner)
     {
-      print("no move");
       return false;
     }
     print(card.GetComponent<GUICard>().CardData.ToString() + ", " + CardList.Last().ToString());
