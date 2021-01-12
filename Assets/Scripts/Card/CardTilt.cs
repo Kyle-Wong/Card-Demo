@@ -13,6 +13,7 @@ public class CardTilt : MonoBehaviour
   public float TiltSpeed;
   private GUICard _card;
   private Vector3 _prevPosition;
+  private bool _returningToIdentityRotation;
   void Start()
   {
     _card = GetComponent<GUICard>();
@@ -26,11 +27,18 @@ public class CardTilt : MonoBehaviour
     {
       Vector2 velocity = transform.position - _prevPosition;
       transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(new Vector3(-velocity.y * TiltScale.y, velocity.x * TiltScale.x, 0)), TiltSpeed * Time.deltaTime);
+      _returningToIdentityRotation = true;
     }
-    else
+    else if (_returningToIdentityRotation)
     {
       //Return to non-rotated rotation
       transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.identity, TiltSpeed * Time.deltaTime);
+      if (Vector3.Magnitude(transform.eulerAngles - Quaternion.identity.eulerAngles) < 0.05f)
+      {
+        //Stop controlling rotation once card is sufficiently close to identity quaternion
+        transform.rotation = Quaternion.identity;
+        _returningToIdentityRotation = false;
+      }
     }
     //for tracking card's velocity
     _prevPosition = transform.position;

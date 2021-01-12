@@ -30,7 +30,7 @@ public class TableauStack : StackController
     if (_slotDistributor.SlotCount > 1)
     {
       //Reveal the facedown card beneath the card that was removed
-      _slotDistributor.GetCardSlot(_slotDistributor.SlotCount - 2).GetComponent<CardSlot>().Card.FaceUp = true;
+      _slotDistributor.GetCardSlot(_slotDistributor.SlotCount - 2).GetComponent<CardSlot>().Card.SetFaceUp(true, false);
     }
   }
 }

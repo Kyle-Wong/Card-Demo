@@ -54,5 +54,39 @@ public class Solitaire
         return false;
     }
   }
+  public static List<(Location, int)> GetCardActions(Card card, List<CardList> tableauStacks, List<CardList> foundationStacks)
+  {
+    List<(Location, int)> validMoves = new List<(Location, int)>();
+    for (int i = 0; i < tableauStacks.Count; i++)
+    {
+      if (Solitaire.ValidMove(card, tableauStacks[i], Solitaire.Location.Tableau))
+      {
+        validMoves.Add((Location.Tableau, i));
+      }
+    }
+    for (int i = 0; i < foundationStacks.Count; i++)
+    {
+      if (Solitaire.ValidMove(card, foundationStacks[i], Solitaire.Location.Foundation))
+      {
+        validMoves.Add((Location.Foundation, i));
+      }
+    }
+    return validMoves;
+  }
+  public static bool HasActions(List<CardList> tableauStacks, List<CardList> foundationStacks, CardList talonStack)
+  {
+    foreach (CardList ts in tableauStacks)
+    {
+      if (GetCardActions(ts.Last(), tableauStacks, foundationStacks).Count > 0)
+      {
+        return true;
+      }
+    }
 
+    if (GetCardActions(talonStack.Last(), tableauStacks, foundationStacks).Count > 0)
+    {
+      return true;
+    }
+    return false;
+  }
 }

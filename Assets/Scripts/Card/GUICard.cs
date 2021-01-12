@@ -42,18 +42,7 @@ public class GUICard : MonoBehaviour
   }
   private Image _image;
   private bool _faceUp;
-  public bool FaceUp
-  {
-    get
-    {
-      return _faceUp;
-    }
-    set
-    {
-      _faceUp = value;
-      UpdateImage();
-    }
-  }
+  public float FlipSpeed;
   void Awake()
   {
     _image = transform.GetComponent<Image>();
@@ -74,7 +63,7 @@ public class GUICard : MonoBehaviour
       If card is faceup, get the correct sprite for the card's suit and rank
       from gameController
     */
-    if (FaceUp)
+    if (FaceUp())
     {
       _image.sprite = _gameController.CardFronts[ImageCode()];
     }
@@ -89,6 +78,46 @@ public class GUICard : MonoBehaviour
       Get sprite index matching card's suit and rank stored in gameController
     */
     return (_cardData.Value - 1) * 4 + _cardData.Suit;
+  }
+  public void SetFaceUp(bool faceUp, bool instantFlip = false)
+  {
+    if (!instantFlip && faceUp != _faceUp)
+    {
+      //Flip only when the facing direction actually changes
+      //Card image updates during coroutine
+      _faceUp = faceUp;
+      StartCoroutine(Flip(FlipSpeed));
+    }
+    else
+    {
+      _faceUp = faceUp;
+      UpdateImage();
+    }
+  }
+  public bool FaceUp()
+  {
+    return _faceUp;
+  }
+  private IEnumerator Flip(float flipSpeed)
+  {
+    /*
+      Animation to flip card, switching between card front and card back when it is vertical to the camera.
+    */
+    while (transform.eulerAngles.y < 90)
+    {
+      transform.Rotate(Vector3.up, flipSpeed * Time.deltaTime);
+      yield return null;
+
+    }
+    UpdateImage();
+    float y = transform.eulerAngles.y;
+    //eulerAngles are [0-360], so end loop when eulerangles.y passes 0 and becomes 359.x
+    while (transform.eulerAngles.y <= y)
+    {
+      transform.Rotate(Vector3.up, -flipSpeed * Time.deltaTime);
+      yield return null;
+    }
+    transform.rotation = Quaternion.identity;
   }
   public void OnDrag()
   {
@@ -128,7 +157,7 @@ public class GUICard : MonoBehaviour
       Behavior determined by type of CardController that owns this slot
       Mark this card as the one under the cursor
     */
-    if (FaceUp)
+    if (FaceUp())
       Cursor.Instance.CardUnderCursor = this;
     if (CardSlot == null)
     {

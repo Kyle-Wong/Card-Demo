@@ -9,7 +9,6 @@ public class MoveToSlot : MonoBehaviour
   private GUICard _card;
   private Transform _cursor;
   public float MoveSpeed;
-  public float RotationSpeed;
   void Start()
   {
     _card = GetComponent<GUICard>();
@@ -23,12 +22,10 @@ public class MoveToSlot : MonoBehaviour
     if (_card.IsHeld)
     {
       transform.position = Vector3.Lerp(transform.position, _cursor.position, MoveSpeed * Time.deltaTime);
-      //transform.rotation = Quaternion.Lerp(transform.rotation, cursor.rotation, rotationSpeed * Time.deltaTime);
     }
     else if (cardSlot != null)
     {
       transform.position = Vector3.Lerp(transform.position, cardSlot.position, MoveSpeed * Time.deltaTime);
-      transform.rotation = Quaternion.Lerp(transform.rotation, cardSlot.rotation, RotationSpeed * Time.deltaTime);
     }
 
   }

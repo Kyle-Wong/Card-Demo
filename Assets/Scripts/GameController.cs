@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 public enum GameState
@@ -19,8 +20,8 @@ public class GameController : MonoBehaviour
   public DeckController Stock;
   public TalonStack Talon;
 
-  public TableauStack[] TableauStacks;
-  public FoundationStack[] FoundationStacks;
+  public List<TableauStack> TableauStacks;
+  public List<FoundationStack> FoundationStacks;
   public Transform CardPrefab;
   public Transform CardSlotPrefab;
   //Card fronts are in order from Aces to Kings, with suits in alphabetical order (Clubs->Diamonds->Hearts->Spades)
@@ -58,14 +59,14 @@ public class GameController : MonoBehaviour
   private IEnumerator InitializeGame(float timeBetweenDraws)
   {
     yield return new WaitForEndOfFrame();
-    int N = TableauStacks.Length;
+    int N = TableauStacks.Count;
     GUICard card;
     for (int i = 0; i < N; i++)
     {
       for (int j = i; j < N; j++)
       {
         card = Stock.DrawCard().GetComponent<GUICard>();
-        card.FaceUp = (i == j);
+        card.SetFaceUp(i == j, true);
         TableauStacks[j].AddCard(card);
         yield return new WaitForSeconds(timeBetweenDraws);
       }
@@ -84,24 +85,29 @@ public class GameController : MonoBehaviour
   {
 
     List<CardSlot> validMoves = new List<CardSlot>();
-    if (heldCard == null)
+    if (heldCard == null || !heldCard.CardSlot.CardSlotOwner.CanRemoveCard(heldCard.CardSlot, heldCard))
     {
       return validMoves;
     }
-    for (int i = 0; i < TableauStacks.Length; i++)
+
+    List<CardList> tableauCards = TableauStacks.Select(s => s.CardList).ToList();
+    List<CardList> foundationCards = FoundationStacks.Select(s => s.CardList).ToList();
+    List<(Solitaire.Location, int)> actions = Solitaire.GetCardActions(heldCard.CardData, tableauCards, foundationCards);
+
+
+    foreach ((Solitaire.Location loc, int i) in actions)
     {
-      if (Solitaire.ValidMove(heldCard.CardData, TableauStacks[i].CardList, Solitaire.Location.Tableau))
+      switch (loc)
       {
-        validMoves.Add(TableauStacks[i].GetOpenSlot());
+        case Solitaire.Location.Tableau:
+          validMoves.Add(TableauStacks[i].GetOpenSlot());
+          break;
+        case Solitaire.Location.Foundation:
+          validMoves.Add(FoundationStacks[i].GetOpenSlot());
+          break;
       }
     }
-    for (int i = 0; i < FoundationStacks.Length; i++)
-    {
-      if (Solitaire.ValidMove(heldCard.CardData, FoundationStacks[i].CardList, Solitaire.Location.Foundation))
-      {
-        validMoves.Add(FoundationStacks[i].GetOpenSlot());
-      }
-    }
+
     return validMoves;
   }
   private void HighlightValidMoves()
@@ -114,6 +120,7 @@ public class GameController : MonoBehaviour
           _highlightedSlots = GetValidMoves(Cursor.Instance.CardHeld);
         else
           _highlightedSlots = GetValidMoves(Cursor.Instance.CardUnderCursor);
+
 
         foreach (CardSlot cs in _highlightedSlots)
         {
